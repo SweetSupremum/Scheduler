@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-game
+      author: Sweet Supremum
+      changes:
+        - createTable:
+            tableName: game
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: Numeric
+                  constraints:
+                    nullable: false
+              - column:
+                  name: discount_price
+                  type: Numeric
+                  constraints:
+                    nullable: true
+              - column:
+                  name: created
+                  type: TIMESTAMP
+                  defaultValue: now
+                  constraints:
+                    nullable: true
+              - column:
+                  name: updated
+                  type: TIMESTAMP
+                  defaultValue: now
+                  constraints:
+                    nullable: true
