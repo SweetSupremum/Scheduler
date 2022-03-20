@@ -8,14 +8,13 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
-                  autoIncrement: true
+                  type: varchar(200)
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
                   name: name
-                  type: varchar(200)
+                  type: varchar(500)
                   constraints:
                     nullable: false
               - column:
@@ -29,6 +28,11 @@ databaseChangeLog:
                   constraints:
                     nullable: true
               - column:
+                  name: image
+                  type: varchar(1000)
+                  constraints:
+                    nullable: true
+              - column:
                   name: created
                   type: TIMESTAMP
                   defaultValue: now
@@ -38,5 +42,15 @@ databaseChangeLog:
                   name: updated
                   type: TIMESTAMP
                   defaultValue: now
+                  constraints:
+                    nullable: true
+              - column:
+                  name: discount_percent
+                  type: bigint
+                  constraints:
+                    nullable: true
+              - column:
+                  name: link
+                  type: varchar(1000)
                   constraints:
                     nullable: true

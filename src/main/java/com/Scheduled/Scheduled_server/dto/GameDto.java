@@ -11,5 +11,7 @@ public class GameDto {
     private String name;
     private Double price;
     private Double discountPrice;
-    private String reference;
+    private String link;
+    private String image;
+    private Integer discountPercent;
 }
