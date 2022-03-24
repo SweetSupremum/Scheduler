@@ -14,7 +14,7 @@ public interface GameMapper {
     List<GameDto> toDto(List<Game> games);
 
     Game gameToGame(GameDto gameDto, @MappingTarget Game game);
-
+    
     Game dtoToGame(GameDto gameDto);
 }
 

@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-game-history
+      author: Sweet Supremum
+      changes:
+        - createTable:
+            tableName: game_history
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: scheduler_time
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: create-foreignKey-game
+      author: Sweet Supremum
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: game_history_id
+            baseTableCatalogName: Scheduler
+            baseTableName: game
+            baseTableSchemaName: public
+            constraintName: fk_game_history
+            deferrable: true
+            initiallyDeferred: true
+            onDelete: CASCADE
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableCatalogName: Scheduler
+            referencedTableName: game_history
+            referencedTableSchemaName: public
+            validate: true
+

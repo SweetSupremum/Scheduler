@@ -7,10 +7,10 @@ import java.util.List;
 public interface GameService {
     void add(GameDto game);
 
-    GameDto get(Long id);
+    GameDto get(String id);
 
     List<GameDto> getAll();
 
-    void delete(Long id);
+    void delete(String id);
 
 }

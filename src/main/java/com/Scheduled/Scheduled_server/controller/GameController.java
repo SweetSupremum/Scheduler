@@ -32,7 +32,7 @@ public class GameController {
     }
 
     @GetMapping("/games/{id}")
-    public ResponseEntity<GameDto> get(@PathVariable Long id) {
+    public ResponseEntity<GameDto> get(@PathVariable String id) {
         return new ResponseEntity<>(gameService.get(id), HttpStatus.OK);
     }
 
@@ -42,7 +42,7 @@ public class GameController {
     }
 
     @DeleteMapping("/games/{id}")
-    public HttpStatus delete(@PathVariable Long id) {
+    public HttpStatus delete(@PathVariable String id) {
         gameService.delete(id);
         return HttpStatus.NO_CONTENT;
     }
