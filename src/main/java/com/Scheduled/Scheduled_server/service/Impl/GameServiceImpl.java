@@ -9,7 +9,6 @@ import com.Scheduled.Scheduled_server.repository.GameHistoryRepository;
 import com.Scheduled.Scheduled_server.repository.GameRepository;
 import com.Scheduled.Scheduled_server.service.GameService;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.util.Supplier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,7 +54,7 @@ public class GameServiceImpl implements GameService {
     @Transactional
     public boolean isUpdate(Game game) {
         return gameHistoryRepository
-                .findByGameBaseLink(game.getGameBase().getLink())
+                .findFirstByGameBaseLinkOrderByIdDesc(game.getGameBase().getLink())
                 .map(gameHistory -> !gameMapper.gameHistoryToGame(gameHistory).equals(game))
                 .orElse(false);
 
@@ -76,9 +75,13 @@ public class GameServiceImpl implements GameService {
             ).collect(Collectors.toList()));
         }
         if (!update.isEmpty()) {
+            System.out.println("обновилась");
             gameHistoryRepository.saveAll(update.parallelStream().map(game ->
-                    gameMapper.updated(game, currentDate, gameHistoryRepository.getByGameBase(game.getGameBase()).getCreated())
-            ).collect(Collectors.toList()));
+            {
+                GameHistory gameHistory = gameHistoryRepository.getFirstByGameBaseLinkOrderByIdDesc(game.getGameBase().getLink());
+                System.out.println(gameHistory);
+                return gameMapper.updated(game, currentDate, gameHistoryRepository.getFirstByGameBaseLinkOrderByIdDesc(game.getGameBase().getLink()).getCreated());
+            }).collect(Collectors.toList()));
         }
     }
 

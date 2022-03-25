@@ -16,7 +16,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @Data
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = "id")
 public class Game {
     @Id
     private String id;

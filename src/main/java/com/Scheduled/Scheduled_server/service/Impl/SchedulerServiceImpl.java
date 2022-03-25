@@ -54,7 +54,7 @@ public class SchedulerServiceImpl {
                         games.stream().filter(gameService::isAdd).collect(Collectors.toList()), games, new Date());
 
             } catch (IOException e) {
-                throw new ParserException();
+                e.printStackTrace();
             }
         });
         System.out.println(gameService.gamesCount());
