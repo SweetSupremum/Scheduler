@@ -7,27 +7,20 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
-import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import java.util.Date;
+import javax.persistence.Id;
+
 
 @Entity
-@Data
 @NoArgsConstructor
+@Data
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true, exclude = {"created", "gameHistory"})
-public class Game extends Auditable {
-    private Date created;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private GameHistory gameHistory;
+@EqualsAndHashCode
+public class Game {
+    @Id
+    private String id;
+    @Embedded
+    private GameBase gameBase;
 
-    public Game(String id, String name, Double price, String link, String image) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.link = link;
-        this.image = image;
-    }
 }

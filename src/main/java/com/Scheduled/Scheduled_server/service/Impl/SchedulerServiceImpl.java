@@ -25,13 +25,10 @@ import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants
 @Service
 @RequiredArgsConstructor
 public class SchedulerServiceImpl {
-    private final GameHistoryServiceImpl gameHistoryService;
     private final GameServiceImpl gameService;
 
     public void parser() throws IOException {
-        Date date = new Date();
-        GameHistory gameHistory = new GameHistory(date);
-        gameHistoryService.save(gameHistory);
+        gameService.deleteAllGames();
         IntStream
                 .range(PAGINATION_START,
                         SchedulerHelper
@@ -51,16 +48,9 @@ public class SchedulerServiceImpl {
                         .select(SELECTOR_GAMES).stream()
                         .filter(SchedulerHelper::isRussianVersion)
                         .map(element -> new GameParser(element).parseGame())
-                        .peek(game -> game.setGameHistory(gameHistory))
                         .distinct().collect(Collectors.toList());
-                gameService.saveAll(games.parallelStream()
-                        .filter(gameService::isAdd)
-                        .peek(game -> game.setCreated(date))
-                        .collect(Collectors.toList()));
-                gameService.saveAll(games.parallelStream()
-                        .filter(gameService::isUpdate)
-                        .peek(game -> game.setGameHistory(gameHistory))
-                        .collect(Collectors.toList()));
+                gameService.saveAll(games.stream().filter(gameService::isUpdate).collect(Collectors.toList()),
+                        games.stream().filter(gameService::isAdd).collect(Collectors.toList()), games);
 
             } catch (IOException e) {
                 throw new ParserException();

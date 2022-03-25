@@ -1,9 +1,11 @@
 package com.Scheduled.Scheduled_server.parser;
 
 import com.Scheduled.Scheduled_server.model.Game;
+import com.Scheduled.Scheduled_server.model.GameBase;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 import org.jsoup.nodes.Element;
+import org.springframework.context.annotation.Bean;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,6 +55,11 @@ public class GameParser {
         while (matcher.find()) {
             currentPrice.append(matcher.group());
         }
+        if(currentPrice.toString().equals(Strings.EMPTY))
+        {
+            System.out.println("bag !!!!" + price);
+            return -1;
+        }
         return Double.parseDouble(currentPrice.toString()
                 .replaceAll(HTML_SPACES, Strings.EMPTY).replaceAll(SEPARATOR_COMMA, SEPARATOR_DOT));
     }
@@ -72,17 +79,18 @@ public class GameParser {
                 .replaceAll(REGEX_PATTERN_DISCOUNT_PERCENT, Strings.EMPTY));
     }
 
+    @Bean
     public Game parseGame() {
         String link = parseId();
-        Game game = new Game(link, parseName(), parsePrice(), parseLink(link), parseImage());
-        setDiscountIsNotEmpty(game);
-        return game;
+        GameBase gameBase = new GameBase(parseName(), parsePrice(), parseLink(link), parseImage());
+        setDiscountIsNotEmpty(gameBase);
+        return new Game(link,gameBase);
     }
 
-    private void setDiscountIsNotEmpty(Game game) {
+    private void setDiscountIsNotEmpty(GameBase gameBase) {
         if (element.selectFirst(SELECTOR_FLAG_DISCOUNT) != null) {
-            game.setDiscountPrice(parseDiscountPrice());
-            game.setDiscountPercent(parseDiscountPercent());
+            gameBase.setDiscountPrice(parseDiscountPrice());
+            gameBase.setDiscountPercent(parseDiscountPercent());
         }
     }
 }

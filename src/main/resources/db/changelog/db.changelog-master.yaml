@@ -3,5 +3,3 @@ databaseChangeLog:
       file: db/changelog/changeset/create-game-table.yaml
   - include:
       file: db/changelog/changeset/create-game-history-table.yaml
-  - include:
-      file: db/changelog/changeset/create-forign-key-game-table.yaml

@@ -20,28 +20,28 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/games")
 @RequiredArgsConstructor
 public class GameController {
     private final GameServiceImpl gameService;
 
-    @PostMapping("/games")
+    @PostMapping
     public HttpStatus add(@RequestBody GameDto game) {
         gameService.add(game);
         return HttpStatus.CREATED;
     }
 
-    @GetMapping("/games/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<GameDto> get(@PathVariable String id) {
         return new ResponseEntity<>(gameService.get(id), HttpStatus.OK);
     }
 
-    @GetMapping("/games")
+    @GetMapping
     public ResponseEntity<List<GameDto>> getAll() {
         return new ResponseEntity<>(gameService.getAll(), HttpStatus.OK);
     }
 
-    @DeleteMapping("/games/{id}")
+    @DeleteMapping("/{id}")
     public HttpStatus delete(@PathVariable String id) {
         gameService.delete(id);
         return HttpStatus.NO_CONTENT;

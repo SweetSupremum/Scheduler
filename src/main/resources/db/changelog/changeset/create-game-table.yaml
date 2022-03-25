@@ -33,12 +33,6 @@ databaseChangeLog:
                   constraints:
                     nullable: true
               - column:
-                  name: created
-                  type: TIMESTAMP
-                  defaultValue: now
-                  constraints:
-                    nullable: true
-              - column:
                   name: discount_percent
                   type: bigint
                   constraints:
@@ -48,8 +42,3 @@ databaseChangeLog:
                   type: varchar(1000)
                   constraints:
                     nullable: true
-              - column:
-                  name: game_history_id
-                  type: bigint
-                  constraints:
-                    nullable: false

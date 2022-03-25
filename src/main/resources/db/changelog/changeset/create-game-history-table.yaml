@@ -14,28 +14,43 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: scheduler_time
+                  name: created
                   type: TIMESTAMP
                   constraints:
+                    nullable: true
+              - column:
+                  name: updated
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: true
+              - column:
+                  name: name
+                  type: varchar(500)
+                  constraints:
                     nullable: false
-
-  - changeSet:
-      id: create-foreignKey-game
-      author: Sweet Supremum
-      changes:
-        - addForeignKeyConstraint:
-            baseColumnNames: game_history_id
-            baseTableCatalogName: Scheduler
-            baseTableName: game
-            baseTableSchemaName: public
-            constraintName: fk_game_history
-            deferrable: true
-            initiallyDeferred: true
-            onDelete: CASCADE
-            onUpdate: CASCADE
-            referencedColumnNames: id
-            referencedTableCatalogName: Scheduler
-            referencedTableName: game_history
-            referencedTableSchemaName: public
-            validate: true
+              - column:
+                  name: price
+                  type: Numeric
+                  constraints:
+                    nullable: false
+              - column:
+                  name: discount_price
+                  type: Numeric
+                  constraints:
+                    nullable: true
+              - column:
+                  name: image
+                  type: varchar(1000)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: discount_percent
+                  type: bigint
+                  constraints:
+                    nullable: true
+              - column:
+                  name: link
+                  type: varchar(1000)
+                  constraints:
+                    nullable: true
 

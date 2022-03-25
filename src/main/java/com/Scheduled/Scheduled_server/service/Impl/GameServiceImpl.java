@@ -4,24 +4,32 @@ import com.Scheduled.Scheduled_server.dto.GameDto;
 import com.Scheduled.Scheduled_server.error.custom_exception.GameNotFoundException;
 import com.Scheduled.Scheduled_server.mapping.GameMapper;
 import com.Scheduled.Scheduled_server.model.Game;
+import com.Scheduled.Scheduled_server.model.GameHistory;
+import com.Scheduled.Scheduled_server.repository.GameHistoryRepository;
 import com.Scheduled.Scheduled_server.repository.GameRepository;
 import com.Scheduled.Scheduled_server.service.GameService;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.Supplier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 
 @Service
 @RequiredArgsConstructor
 public class GameServiceImpl implements GameService {
     private final GameRepository gameRepository;
     private final GameMapper gameMapper;
+    private final GameHistoryRepository gameHistoryRepository;
 
     @Override
     public void add(GameDto gameDto) {
-        gameRepository.findByName(gameDto.getName())
+        gameRepository.findByGameBaseName(gameDto.getGameBase().getName())
                 .ifPresentOrElse((item) -> gameRepository.save(gameMapper.gameToGame(gameDto, item)),
                         () -> gameRepository.save(gameMapper.dtoToGame(gameDto)));
     }
@@ -47,18 +55,41 @@ public class GameServiceImpl implements GameService {
 
     @Transactional
     public boolean isUpdate(Game game) {
-        return  gameRepository.findById(game.getId())
+        return gameRepository.findById(game.getId())
                 .map(value -> !value.equals(game))
                 .orElse(false);
     }
 
     @Transactional
     public boolean isAdd(Game game) {
-        return !gameRepository.existsById(game.getId());
+        return !gameHistoryRepository.existsByGameBaseLink(game.getGameBase().getLink());
     }
 
-    public void saveAll(List<Game> games) {
+    @Transactional
+    public void saveAll(List<Game> update, List<Game> add, List<Game> games) {
         if (!games.isEmpty()) gameRepository.saveAll(games);
+        Date currentDate = new Date();
+        if (!add.isEmpty()) {
+            gameHistoryRepository.saveAll(add.parallelStream().map(game -> {
+                GameHistory gameHistory = new GameHistory(game.getGameBase());
+                gameHistory.setCreated(currentDate);
+                gameHistory.setUpdated(currentDate);
+                return gameHistory;
+            }).collect(Collectors.toList()));
+        }
+        if (!update.isEmpty()) {
+            gameHistoryRepository.saveAll(update.parallelStream().map(game -> {
+                GameHistory gameHistory = new GameHistory(game.getGameBase());
+                gameHistory.setUpdated(currentDate);
+                System.out.println("Обновилась:" + gameHistory);
+                return gameHistory;
+            }).collect(Collectors.toList()));
+        }
+    }
+    @Transactional
+    public void deleteAllGames()
+    {
+        if (!gameRepository.findAll().isEmpty()) gameRepository.deleteAllInBatch();
     }
 
     public long gamesCount() {
