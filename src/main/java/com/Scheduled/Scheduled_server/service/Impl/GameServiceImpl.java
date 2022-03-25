@@ -17,7 +17,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 @Service
@@ -55,9 +54,11 @@ public class GameServiceImpl implements GameService {
 
     @Transactional
     public boolean isUpdate(Game game) {
-        return gameRepository.findById(game.getId())
-                .map(value -> !value.equals(game))
+        return gameHistoryRepository
+                .findByGameBaseLink(game.getGameBase().getLink())
+                .map(gameHistory -> !gameMapper.gameHistoryToGame(gameHistory).equals(game))
                 .orElse(false);
+
     }
 
     @Transactional
@@ -66,29 +67,22 @@ public class GameServiceImpl implements GameService {
     }
 
     @Transactional
-    public void saveAll(List<Game> update, List<Game> add, List<Game> games) {
+    public void saveAll(List<Game> update, List<Game> add, List<Game> games, Date currentDate) {
         if (!games.isEmpty()) gameRepository.saveAll(games);
-        Date currentDate = new Date();
+
         if (!add.isEmpty()) {
-            gameHistoryRepository.saveAll(add.parallelStream().map(game -> {
-                GameHistory gameHistory = new GameHistory(game.getGameBase());
-                gameHistory.setCreated(currentDate);
-                gameHistory.setUpdated(currentDate);
-                return gameHistory;
-            }).collect(Collectors.toList()));
+            gameHistoryRepository.saveAll(add.parallelStream().map(game ->
+                    gameMapper.created(game, currentDate, currentDate)
+            ).collect(Collectors.toList()));
         }
         if (!update.isEmpty()) {
-            gameHistoryRepository.saveAll(update.parallelStream().map(game -> {
-                GameHistory gameHistory = new GameHistory(game.getGameBase());
-                gameHistory.setUpdated(currentDate);
-                System.out.println("Обновилась:" + gameHistory);
-                return gameHistory;
-            }).collect(Collectors.toList()));
+            gameHistoryRepository.saveAll(update.parallelStream().map(game ->
+                    gameMapper.updated(game, currentDate, gameHistoryRepository.getByGameBase(game.getGameBase()).getCreated())
+            ).collect(Collectors.toList()));
         }
     }
-    @Transactional
-    public void deleteAllGames()
-    {
+
+    public void deleteAllGames() {
         if (!gameRepository.findAll().isEmpty()) gameRepository.deleteAllInBatch();
     }
 

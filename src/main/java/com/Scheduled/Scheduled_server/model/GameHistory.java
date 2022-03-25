@@ -15,8 +15,8 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode(exclude = {"id", "created", "updated"})
-public class GameHistory {
+@EqualsAndHashCode(exclude = {"id","created", "updated"})
+public class GameHistory  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,7 +25,4 @@ public class GameHistory {
     @Embedded
     private GameBase gameBase;
 
-    public GameHistory(GameBase gameBase) {
-        this.gameBase = gameBase;
-    }
 }

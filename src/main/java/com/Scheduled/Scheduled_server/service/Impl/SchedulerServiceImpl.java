@@ -28,6 +28,7 @@ public class SchedulerServiceImpl {
     private final GameServiceImpl gameService;
 
     public void parser() throws IOException {
+
         gameService.deleteAllGames();
         IntStream
                 .range(PAGINATION_START,
@@ -50,7 +51,7 @@ public class SchedulerServiceImpl {
                         .map(element -> new GameParser(element).parseGame())
                         .distinct().collect(Collectors.toList());
                 gameService.saveAll(games.stream().filter(gameService::isUpdate).collect(Collectors.toList()),
-                        games.stream().filter(gameService::isAdd).collect(Collectors.toList()), games);
+                        games.stream().filter(gameService::isAdd).collect(Collectors.toList()), games, new Date());
 
             } catch (IOException e) {
                 throw new ParserException();

@@ -55,8 +55,7 @@ public class GameParser {
         while (matcher.find()) {
             currentPrice.append(matcher.group());
         }
-        if(currentPrice.toString().equals(Strings.EMPTY))
-        {
+        if (currentPrice.toString().equals(Strings.EMPTY)) {
             System.out.println("bag !!!!" + price);
             return -1;
         }
@@ -84,7 +83,7 @@ public class GameParser {
         String link = parseId();
         GameBase gameBase = new GameBase(parseName(), parsePrice(), parseLink(link), parseImage());
         setDiscountIsNotEmpty(gameBase);
-        return new Game(link,gameBase);
+        return new Game(link, gameBase);
     }
 
     private void setDiscountIsNotEmpty(GameBase gameBase) {
