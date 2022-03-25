@@ -12,7 +12,7 @@ public interface SchedulerServiceConstants {
     String SELECTOR_DISCOUNT_PRICE = ".css-l24hbj .css-z3vg5b";
     String LINK_STORE_EPIC_GAMES = "https://store.epicgames.com/";
     String REGEX_PATTERN_FREE = "Бесплатно";
-    String REGEX_PATTERN_PRICE ="(((((\\d{1,3})?(\\s|&nbsp;| )(\\d{1,3})),(\\d+)((\\s|&nbsp;| )₽$))|(0$))|((RUB)(\\s|&nbsp;| )(\\d+)[,.]?(\\d+)))";
+    String REGEX_PATTERN_PRICE = "(((((\\d{1,3})?(\\s|&nbsp;| )(\\d{1,3})),(\\d+)((\\s|&nbsp;| )₽$))|(0$))|((RUB)(\\s|&nbsp;| )(\\d+)[,.]?(\\d+)))";
     String REGEX_PATTERN_DISCOUNT_PERCENT = "-?[^0-9]+";
     String HTML_SPACES = "[\\s₽&nbsp; RUB]";
     String SELECT_DISCOUNT_PERCENT = ".css-b0xoos";
@@ -23,5 +23,6 @@ public interface SchedulerServiceConstants {
     String SEPARATOR_SLASH = "/";
     String SEPARATOR_COMMA = ",";
     String SEPARATOR_DOT = ".";
+    int NO_VALID_PRICE_GAME = -1;
 
 }

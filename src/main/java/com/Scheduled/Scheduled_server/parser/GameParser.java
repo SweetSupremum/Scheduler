@@ -56,7 +56,6 @@ public class GameParser {
             currentPrice.append(matcher.group());
         }
         if (currentPrice.toString().equals(Strings.EMPTY)) {
-            System.out.println("bag !!!!" + price);
             return -1;
         }
         return Double.parseDouble(currentPrice.toString()

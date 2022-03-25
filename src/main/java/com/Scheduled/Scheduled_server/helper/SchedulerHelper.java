@@ -28,4 +28,5 @@ public class SchedulerHelper {
         return Pattern.compile(REGEX_PATTERN_RUSSIAN_VERSION)
                 .matcher(elementId.attr(ATTRIBUTE_HREF)).find();
     }
+
 }

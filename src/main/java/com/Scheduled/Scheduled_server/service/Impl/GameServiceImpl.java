@@ -2,6 +2,7 @@ package com.Scheduled.Scheduled_server.service.Impl;
 
 import com.Scheduled.Scheduled_server.dto.GameDto;
 import com.Scheduled.Scheduled_server.error.custom_exception.GameNotFoundException;
+import com.Scheduled.Scheduled_server.helper.GameHelper;
 import com.Scheduled.Scheduled_server.mapping.GameMapper;
 import com.Scheduled.Scheduled_server.model.Game;
 import com.Scheduled.Scheduled_server.model.GameHistory;
@@ -75,13 +76,13 @@ public class GameServiceImpl implements GameService {
             ).collect(Collectors.toList()));
         }
         if (!update.isEmpty()) {
-            System.out.println("обновилась");
-            gameHistoryRepository.saveAll(update.parallelStream().map(game ->
-            {
-                GameHistory gameHistory = gameHistoryRepository.getFirstByGameBaseLinkOrderByIdDesc(game.getGameBase().getLink());
-                System.out.println(gameHistory);
-                return gameMapper.updated(game, currentDate, gameHistoryRepository.getFirstByGameBaseLinkOrderByIdDesc(game.getGameBase().getLink()).getCreated());
-            }).collect(Collectors.toList()));
+            gameHistoryRepository.saveAll(update.parallelStream().filter(GameHelper::isValidGame)
+                    .map(game ->
+                            gameMapper
+                                    .updated(game, currentDate, gameHistoryRepository
+                                            .getFirstByGameBaseLinkOrderByIdDesc(game.getGameBase().getLink())
+                                            .getCreated())
+                    ).collect(Collectors.toList()));
         }
     }
 
