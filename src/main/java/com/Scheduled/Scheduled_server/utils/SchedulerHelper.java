@@ -1,4 +1,4 @@
-package com.Scheduled.Scheduled_server.helper;
+package com.Scheduled.Scheduled_server.utils;
 
 
 import lombok.experimental.UtilityClass;
@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.ATTRIBUTE_HREF;
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.REGEX_PATTERN_RUSSIAN_VERSION;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.ATTRIBUTE_HREF;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.REGEX_PATTERN_RUSSIAN_VERSION;
 
 @UtilityClass
 public class SchedulerHelper {

@@ -1,14 +1,12 @@
-package com.Scheduled.Scheduled_server.service.Impl;
+package com.Scheduled.Scheduled_server.service;
 
 import com.Scheduled.Scheduled_server.dto.GameDto;
 import com.Scheduled.Scheduled_server.error.custom_exception.GameNotFoundException;
-import com.Scheduled.Scheduled_server.helper.GameHelper;
+import com.Scheduled.Scheduled_server.utils.GameHelper;
 import com.Scheduled.Scheduled_server.mapping.GameMapper;
 import com.Scheduled.Scheduled_server.model.Game;
-import com.Scheduled.Scheduled_server.model.GameHistory;
 import com.Scheduled.Scheduled_server.repository.GameHistoryRepository;
 import com.Scheduled.Scheduled_server.repository.GameRepository;
-import com.Scheduled.Scheduled_server.service.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,23 +24,19 @@ public class GameServiceImpl implements GameService {
     private final GameMapper gameMapper;
     private final GameHistoryRepository gameHistoryRepository;
 
-    @Override
-    public void add(GameDto gameDto) {
-        gameRepository.findByGameBaseName(gameDto.getGameBase().getName())
-                .ifPresentOrElse((item) -> gameRepository.save(gameMapper.gameToGame(gameDto, item)),
-                        () -> gameRepository.save(gameMapper.dtoToGame(gameDto)));
-    }
 
     @Override
     public GameDto get(String id) {
         return gameMapper.toDto(gameRepository.findById(id)
-                .orElseThrow(GameNotFoundException::new));
+                .orElseThrow(GameNotFoundException::new).getGameBase());
     }
 
     @Override
     public List<GameDto> getAll() {
-        return gameMapper.toDto(Optional.of(gameRepository.findAll())
-                .orElseThrow(GameNotFoundException::new));
+        return Optional.of(gameMapper.toDtos(gameRepository.findAll()
+                .stream().map(Game::getGameBase)
+                .collect(Collectors.toList())))
+                .orElseThrow(GameNotFoundException::new);
     }
 
     @Override

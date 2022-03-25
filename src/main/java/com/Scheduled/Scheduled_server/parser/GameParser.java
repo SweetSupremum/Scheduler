@@ -2,49 +2,47 @@ package com.Scheduled.Scheduled_server.parser;
 
 import com.Scheduled.Scheduled_server.model.Game;
 import com.Scheduled.Scheduled_server.model.GameBase;
-import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 import org.jsoup.nodes.Element;
-import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.ATTRIBUTE_DATA_IMAGE;
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.ATTRIBUTE_HREF;
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.HTML_SPACES;
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.LINK_STORE_EPIC_GAMES;
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.REGEX_PATTERN_DISCOUNT_PERCENT;
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.REGEX_PATTERN_FREE;
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.REGEX_PATTERN_PRICE;
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.SELECTOR_DISCOUNT_PRICE;
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.SELECTOR_FLAG_DISCOUNT;
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.SELECTOR_NAME;
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.SELECTOR_PRICE;
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.SELECT_DISCOUNT_PERCENT;
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.SEPARATOR_COMMA;
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.SEPARATOR_DOT;
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.SEPARATOR_SLASH;
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.TAG_IMAGE;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.ATTRIBUTE_DATA_IMAGE;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.ATTRIBUTE_HREF;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.HTML_SPACES;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.LINK_STORE_EPIC_GAMES;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.REGEX_PATTERN_DISCOUNT_PERCENT;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.REGEX_PATTERN_FREE;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.REGEX_PATTERN_PRICE;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.SELECTOR_DISCOUNT_PRICE;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.SELECTOR_FLAG_DISCOUNT;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.SELECTOR_NAME;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.SELECTOR_PRICE;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.SELECT_DISCOUNT_PERCENT;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.SEPARATOR_COMMA;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.SEPARATOR_DOT;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.SEPARATOR_SLASH;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.TAG_IMAGE;
 
-@AllArgsConstructor
+@Component
 public class GameParser {
-    Element element;
 
-    private String parseId() {
+    private String parseId(Element element) {
         return element.attr(ATTRIBUTE_HREF)
                 .replaceFirst(SEPARATOR_SLASH, Strings.EMPTY);
     }
 
-    private String parseName() {
+    private String parseName(Element element) {
         return element.selectFirst(SELECTOR_NAME).text();
     }
 
-    private double parsePrice() {
+    private double parsePrice(Element element) {
         return parsePrices(element.attr(SELECTOR_PRICE));
     }
 
-    private double parseDiscountPrice() {
+    private double parseDiscountPrice(Element element) {
         return parsePrices(element.select(SELECTOR_DISCOUNT_PRICE).text());
     }
 
@@ -66,29 +64,28 @@ public class GameParser {
         return LINK_STORE_EPIC_GAMES + link;
     }
 
-    private String parseImage() {
+    private String parseImage(Element element) {
         return element
                 .selectFirst(TAG_IMAGE).attr(ATTRIBUTE_DATA_IMAGE);
     }
 
-    public Integer parseDiscountPercent() {
+    private Integer parseDiscountPercent(Element element) {
         return Integer.parseInt(element
                 .select(SELECT_DISCOUNT_PERCENT).text()
                 .replaceAll(REGEX_PATTERN_DISCOUNT_PERCENT, Strings.EMPTY));
     }
 
-    @Bean
-    public Game parseGame() {
-        String link = parseId();
-        GameBase gameBase = new GameBase(parseName(), parsePrice(), parseLink(link), parseImage());
-        setDiscountIsNotEmpty(gameBase);
+    public Game parseGame(Element element) {
+        String link = parseId(element);
+        GameBase gameBase = new GameBase(parseName(element), parsePrice(element), parseLink(link), parseImage(element));
+        setDiscountIsNotEmpty(gameBase, element);
         return new Game(link, gameBase);
     }
 
-    private void setDiscountIsNotEmpty(GameBase gameBase) {
+    private void setDiscountIsNotEmpty(GameBase gameBase, Element element) {
         if (element.selectFirst(SELECTOR_FLAG_DISCOUNT) != null) {
-            gameBase.setDiscountPrice(parseDiscountPrice());
-            gameBase.setDiscountPercent(parseDiscountPercent());
+            gameBase.setDiscountPrice(parseDiscountPrice(element));
+            gameBase.setDiscountPercent(parseDiscountPercent(element));
         }
     }
 }

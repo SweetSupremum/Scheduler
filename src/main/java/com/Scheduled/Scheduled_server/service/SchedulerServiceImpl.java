@@ -1,9 +1,8 @@
-package com.Scheduled.Scheduled_server.service.Impl;
+package com.Scheduled.Scheduled_server.service;
 
-import com.Scheduled.Scheduled_server.error.custom_exception.ParserException;
-import com.Scheduled.Scheduled_server.helper.SchedulerHelper;
+import com.Scheduled.Scheduled_server.service.GameServiceImpl;
+import com.Scheduled.Scheduled_server.utils.SchedulerHelper;
 import com.Scheduled.Scheduled_server.model.Game;
-import com.Scheduled.Scheduled_server.model.GameHistory;
 import com.Scheduled.Scheduled_server.parser.GameParser;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
@@ -16,19 +15,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.PAGINATION_START;
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.PAGINATION_STEP;
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.SELECTOR_FOOTER_LI;
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.SELECTOR_GAMES;
-import static com.Scheduled.Scheduled_server.constants.SchedulerServiceConstants.START_URL;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.PAGINATION_START;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.PAGINATION_STEP;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.SELECTOR_FOOTER_LI;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.SELECTOR_GAMES;
+import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.START_URL;
 
 @Service
 @RequiredArgsConstructor
 public class SchedulerServiceImpl {
     private final GameServiceImpl gameService;
+    private final GameParser gameParser;
 
     public void parser() throws IOException {
-
         gameService.deleteAllGames();
         IntStream
                 .range(PAGINATION_START,
@@ -48,7 +47,7 @@ public class SchedulerServiceImpl {
                 List<Game> games = Jsoup.connect(url).get()
                         .select(SELECTOR_GAMES).stream()
                         .filter(SchedulerHelper::isRussianVersion)
-                        .map(element -> new GameParser(element).parseGame())
+                        .map(gameParser::parseGame)
                         .distinct().collect(Collectors.toList());
                 gameService.saveAll(games.stream().filter(gameService::isUpdate).collect(Collectors.toList()),
                         games.stream().filter(gameService::isAdd).collect(Collectors.toList()), games, new Date());

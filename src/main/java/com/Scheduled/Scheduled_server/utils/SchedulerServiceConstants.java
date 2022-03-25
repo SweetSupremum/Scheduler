@@ -1,4 +1,4 @@
-package com.Scheduled.Scheduled_server.constants;
+package com.Scheduled.Scheduled_server.utils;
 
 public interface SchedulerServiceConstants {
     String START_URL = "https://store.epicgames.com/ru/browse?sortBy=releaseDate&sortDir=DESC&count=40&start=";
