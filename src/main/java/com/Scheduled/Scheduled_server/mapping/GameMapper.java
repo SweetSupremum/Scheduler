@@ -19,10 +19,10 @@ public interface GameMapper {
     @Mapping(target = "id", ignore = true)
     Game gameHistoryToGame(GameHistory gameHistory);
 
-    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "id", source = "game.gameBase")
     GameHistory created(Game game, Date created, Date updated);
 
-    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "id", source = "game.gameBase")
     GameHistory updated(Game game, Date updated, Date created);
 }
 

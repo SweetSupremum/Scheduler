@@ -86,6 +86,9 @@ public class GameParser {
         if (element.selectFirst(SELECTOR_FLAG_DISCOUNT) != null) {
             gameBase.setDiscountPrice(parseDiscountPrice(element));
             gameBase.setDiscountPercent(parseDiscountPercent(element));
+        } else {
+            gameBase.setDiscountPercent(0);
+            gameBase.setDiscountPrice(parsePrice(element));
         }
     }
 }

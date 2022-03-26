@@ -2,7 +2,6 @@ package com.Scheduled.Scheduled_server.service;
 
 import com.Scheduled.Scheduled_server.dto.GameDto;
 import com.Scheduled.Scheduled_server.error.custom_exception.GameNotFoundException;
-import com.Scheduled.Scheduled_server.utils.GameHelper;
 import com.Scheduled.Scheduled_server.mapping.GameMapper;
 import com.Scheduled.Scheduled_server.model.Game;
 import com.Scheduled.Scheduled_server.repository.GameHistoryRepository;
@@ -49,15 +48,15 @@ public class GameServiceImpl implements GameService {
     @Transactional
     public boolean isUpdate(Game game) {
         return gameHistoryRepository
-                .findFirstByGameBaseLinkOrderByIdDesc(game.getGameBase().getLink())
-                .map(gameHistory -> !gameMapper.gameHistoryToGame(gameHistory).equals(game))
+                .findById(game.getGameBase())
+                .map(gameHistory -> !gameHistory.getId().equals(game.getGameBase()))
                 .orElse(false);
 
     }
 
     @Transactional
     public boolean isAdd(Game game) {
-        return !gameHistoryRepository.existsByGameBaseLink(game.getGameBase().getLink());
+        return !gameHistoryRepository.existsById(game.getGameBase());
     }
 
     @Transactional
@@ -70,11 +69,11 @@ public class GameServiceImpl implements GameService {
             ).collect(Collectors.toList()));
         }
         if (!update.isEmpty()) {
-            gameHistoryRepository.saveAll(update.parallelStream().filter(GameHelper::isValidGame)
+            gameHistoryRepository.saveAll(update.parallelStream()
                     .map(game ->
                             gameMapper
                                     .updated(game, currentDate, gameHistoryRepository
-                                            .getFirstByGameBaseLinkOrderByIdDesc(game.getGameBase().getLink())
+                                            .getByIdLink(game.getGameBase().getLink())
                                             .getCreated())
                     ).collect(Collectors.toList()));
         }

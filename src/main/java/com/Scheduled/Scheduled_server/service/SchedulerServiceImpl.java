@@ -1,6 +1,6 @@
 package com.Scheduled.Scheduled_server.service;
 
-import com.Scheduled.Scheduled_server.service.GameServiceImpl;
+import com.Scheduled.Scheduled_server.utils.GameHelper;
 import com.Scheduled.Scheduled_server.utils.SchedulerHelper;
 import com.Scheduled.Scheduled_server.model.Game;
 import com.Scheduled.Scheduled_server.parser.GameParser;
@@ -48,7 +48,9 @@ public class SchedulerServiceImpl {
                         .select(SELECTOR_GAMES).stream()
                         .filter(SchedulerHelper::isRussianVersion)
                         .map(gameParser::parseGame)
+                        .filter(GameHelper::isValidGame)
                         .distinct().collect(Collectors.toList());
+                games.forEach(System.out::println);
                 gameService.saveAll(games.stream().filter(gameService::isUpdate).collect(Collectors.toList()),
                         games.stream().filter(gameService::isAdd).collect(Collectors.toList()), games, new Date());
 
@@ -56,6 +58,6 @@ public class SchedulerServiceImpl {
                 e.printStackTrace();
             }
         });
-        System.out.println(gameService.gamesCount());
+        System.err.println(gameService.gamesCount());
     }
 }

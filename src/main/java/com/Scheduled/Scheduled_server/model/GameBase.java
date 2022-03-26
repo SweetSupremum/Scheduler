@@ -5,12 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 
 
 @Embeddable
 @Data
 @NoArgsConstructor
-public class GameBase {
+public class GameBase implements Serializable {
 
     private String name;
     private Double price;
