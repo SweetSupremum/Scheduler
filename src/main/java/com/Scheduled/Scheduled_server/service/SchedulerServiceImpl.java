@@ -50,7 +50,6 @@ public class SchedulerServiceImpl {
                         .map(gameParser::parseGame)
                         .filter(GameHelper::isValidGame)
                         .distinct().collect(Collectors.toList());
-                games.forEach(System.out::println);
                 gameService.saveAll(games.stream().filter(gameService::isUpdate).collect(Collectors.toList()),
                         games.stream().filter(gameService::isAdd).collect(Collectors.toList()), games, new Date());
 
