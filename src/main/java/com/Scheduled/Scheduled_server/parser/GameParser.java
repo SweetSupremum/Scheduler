@@ -9,22 +9,22 @@ import org.springframework.stereotype.Component;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.ATTRIBUTE_DATA_IMAGE;
-import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.ATTRIBUTE_HREF;
-import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.HTML_SPACES;
-import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.LINK_STORE_EPIC_GAMES;
-import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.REGEX_PATTERN_DISCOUNT_PERCENT;
-import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.REGEX_PATTERN_FREE;
-import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.REGEX_PATTERN_PRICE;
-import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.SELECTOR_DISCOUNT_PRICE;
-import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.SELECTOR_FLAG_DISCOUNT;
-import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.SELECTOR_NAME;
-import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.SELECTOR_PRICE;
-import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.SELECT_DISCOUNT_PERCENT;
-import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.SEPARATOR_COMMA;
-import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.SEPARATOR_DOT;
-import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.SEPARATOR_SLASH;
-import static com.Scheduled.Scheduled_server.utils.SchedulerServiceConstants.TAG_IMAGE;
+import static com.Scheduled.Scheduled_server.utils.Constants.ATTRIBUTE_DATA_IMAGE;
+import static com.Scheduled.Scheduled_server.utils.Constants.ATTRIBUTE_HREF;
+import static com.Scheduled.Scheduled_server.utils.Constants.HTML_SPACES;
+import static com.Scheduled.Scheduled_server.utils.Constants.LINK_STORE_EPIC_GAMES;
+import static com.Scheduled.Scheduled_server.utils.Constants.REGEX_PATTERN_DISCOUNT_PERCENT;
+import static com.Scheduled.Scheduled_server.utils.Constants.REGEX_PATTERN_FREE;
+import static com.Scheduled.Scheduled_server.utils.Constants.REGEX_PATTERN_PRICE;
+import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_DISCOUNT_PRICE;
+import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_FLAG_DISCOUNT;
+import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_NAME;
+import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_PRICE;
+import static com.Scheduled.Scheduled_server.utils.Constants.SELECT_DISCOUNT_PERCENT;
+import static com.Scheduled.Scheduled_server.utils.Constants.SEPARATOR_COMMA;
+import static com.Scheduled.Scheduled_server.utils.Constants.SEPARATOR_DOT;
+import static com.Scheduled.Scheduled_server.utils.Constants.SEPARATOR_SLASH;
+import static com.Scheduled.Scheduled_server.utils.Constants.TAG_IMAGE;
 
 @Component
 public class GameParser {

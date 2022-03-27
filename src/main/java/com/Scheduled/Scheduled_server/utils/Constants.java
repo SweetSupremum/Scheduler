@@ -1,6 +1,6 @@
 package com.Scheduled.Scheduled_server.utils;
 
-public interface SchedulerServiceConstants {
+public interface Constants {
     String START_URL = "https://store.epicgames.com/ru/browse?sortBy=releaseDate&sortDir=DESC&count=40&start=";
     String SELECTOR_FOOTER_LI = "li.css-1rf09kn>a";
     int PAGINATION_START = 0;
