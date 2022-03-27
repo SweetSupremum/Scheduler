@@ -2,7 +2,7 @@ package com.Scheduled.Scheduled_server.utils;
 
 public interface Constants {
     String START_URL = "https://store.epicgames.com/ru/browse?sortBy=releaseDate&sortDir=DESC&count=40&start=";
-    String SELECTOR_FOOTER_LI = "li.css-1rf09kn>a";
+    String SELECTOR_PAGES_COUNT = "nav[data-testid=egs-pagination] ul>li:nth-last-child(2)";
     int PAGINATION_START = 0;
     int PAGINATION_STEP = 40;
     String SELECTOR_GAMES = "a.css-1jx3eyg";

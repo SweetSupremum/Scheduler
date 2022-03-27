@@ -2,7 +2,6 @@ package com.Scheduled.Scheduled_server.parser;
 
 import com.Scheduled.Scheduled_server.model.Game;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.util.Strings;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Component;
@@ -20,8 +19,8 @@ import static com.Scheduled.Scheduled_server.utils.Constants.NO_VALID_PRICE_GAME
 import static com.Scheduled.Scheduled_server.utils.Constants.PAGINATION_START;
 import static com.Scheduled.Scheduled_server.utils.Constants.PAGINATION_STEP;
 import static com.Scheduled.Scheduled_server.utils.Constants.REGEX_PATTERN_RUSSIAN_VERSION;
-import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_FOOTER_LI;
 import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_GAMES;
+import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_PAGES_COUNT;
 import static com.Scheduled.Scheduled_server.utils.Constants.START_URL;
 
 @Component
@@ -56,12 +55,10 @@ public class EpicGamesClient {
         return
                 Jsoup
                         .connect(START_URL + PAGINATION_START).get()
-                        .select(SELECTOR_FOOTER_LI)
+                        .select(SELECTOR_PAGES_COUNT)
                         .stream()
-                        .map(Element::text)
-                        .filter(e -> !e.equals(Strings.EMPTY))
-                        .mapToInt(Integer::parseInt)
-                        .max().orElseThrow(NoSuchElementException::new);
+                        .mapToInt(element -> Integer.parseInt(element.text())).findFirst()
+                        .orElseThrow(NoSuchElementException::new);
 
 
     }
