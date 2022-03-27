@@ -63,8 +63,7 @@ public class GameServiceImpl {
                                         .map(oldGame -> !oldGame.equals(game))
                                         .orElse(false))
                 .collect(Collectors.toList()), currentDate);
-        gameRepository.deleteAllInBatch();
-        gameRepository.saveAll(currentGames);
+        reboot(currentGames);
     }
 
     private void updateGame(List<Game> update, Date currentDate) {
@@ -81,6 +80,11 @@ public class GameServiceImpl {
                 .map(game -> gameMapper
                         .created(game, currentDate, currentDate)
                 ).collect(Collectors.toList()));
+    }
+
+    private void reboot(List<Game> currentGames) {
+        gameRepository.deleteAllInBatch();
+        gameRepository.saveAll(currentGames);
     }
 
 }
