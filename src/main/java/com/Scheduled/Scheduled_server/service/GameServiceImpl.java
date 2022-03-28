@@ -9,7 +9,6 @@ import com.Scheduled.Scheduled_server.repository.GameHistoryRepository;
 import com.Scheduled.Scheduled_server.repository.GameRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Date;
@@ -45,46 +44,44 @@ public class GameServiceImpl {
     }
 
 
-    @Transactional
     public void loadGames(Date currentDate) throws IOException {
         List<Game> currentGames = epicGamesClient.loadGames();
-        addGame(currentGames.parallelStream()
-                .filter(
-                        game ->
-                                !gameRepository
-                                        .existsById(game.getId()))
-                .collect(Collectors.toList()), currentDate);
-        updateGame(currentGames
-                .parallelStream()
-                .filter(
-                        game ->
-                                gameRepository
-                                        .findById(game.getId())
-                                        .map(oldGame -> !oldGame.equals(game))
-                                        .orElse(false))
-                .collect(Collectors.toList()), currentDate);
-        reboot(currentGames);
+        List<Game> oldGames = gameRepository.findAll();
+        List<Game> addOrUpdate = currentGames.stream().filter(game -> !oldGames.contains(game)).collect(Collectors.toList());
+        List<Game> update = oldGames
+                .stream()
+                .filter(game ->
+                        addOrUpdate
+                                .stream()
+                                .map(Game::getId)
+                                .collect(Collectors.toList())
+                                .contains(game.getId()))
+                .collect(Collectors.toList());
+        List<Game> add = addOrUpdate.stream().filter(game -> !update.contains(game)).collect(Collectors.toList());
+        gameRepository.deleteAll(oldGames.stream().filter(game -> !currentGames.contains(game)).collect(Collectors.toList()));
+        gameRepository.saveAll(addOrUpdate);
+        addGame(add, currentDate);
+        updateGame(update, currentDate);
+
     }
 
     private void updateGame(List<Game> update, Date currentDate) {
         if (!update.isEmpty()) gameHistoryRepository.saveAll(update.parallelStream()
                 .map(game -> gameMapper
-                        .updated(game, currentDate, gameHistoryRepository
-                                .getByIdLink(game.getGameBase().getLink())
-                                .getCreated())
+                        .createOrUpdate(
+                                game,
+                                gameHistoryRepository
+                                        .getFirstByIdLinkOrderByUpdatedAsc(game.getGameBase().getLink()).getCreated(),
+                                currentDate)
                 ).collect(Collectors.toList()));
     }
 
-    private void addGame(List<Game> addGames, Date currentDate) {
+    private void addGame(List<Game> addGames, Date created) {
         if (!addGames.isEmpty()) gameHistoryRepository.saveAll(addGames.parallelStream()
                 .map(game -> gameMapper
-                        .created(game, currentDate, currentDate)
+                        .createOrUpdate(game, created, created)
                 ).collect(Collectors.toList()));
     }
 
-    private void reboot(List<Game> currentGames) {
-        gameRepository.deleteAllInBatch();
-        gameRepository.saveAll(currentGames);
-    }
 
 }

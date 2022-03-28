@@ -1,24 +1,20 @@
 package com.Scheduled.Scheduled_server.parser;
 
 import com.Scheduled.Scheduled_server.model.Game;
+import com.Scheduled.Scheduled_server.utils.EpicGamesClientHelper;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static com.Scheduled.Scheduled_server.utils.Constants.ATTRIBUTE_HREF;
-import static com.Scheduled.Scheduled_server.utils.Constants.NO_VALID_PRICE_GAME;
 import static com.Scheduled.Scheduled_server.utils.Constants.PAGINATION_START;
 import static com.Scheduled.Scheduled_server.utils.Constants.PAGINATION_STEP;
-import static com.Scheduled.Scheduled_server.utils.Constants.REGEX_PATTERN_RUSSIAN_VERSION;
 import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_GAMES;
 import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_PAGES_COUNT;
 import static com.Scheduled.Scheduled_server.utils.Constants.START_URL;
@@ -45,9 +41,9 @@ public class EpicGamesClient {
                             }
                         }
                 )
-                .filter(this::isRussianVersion)
+                .filter(EpicGamesClientHelper::isRussianVersion)
                 .map(gameParser::parseGame)
-                .filter(this::isValidGame).collect(Collectors.toList());
+                .filter(EpicGamesClientHelper::isValidGame).distinct().collect(Collectors.toList());
     }
 
 
@@ -59,16 +55,6 @@ public class EpicGamesClient {
                         .stream()
                         .mapToInt(element -> Integer.parseInt(element.text())).findFirst()
                         .orElseThrow(NoSuchElementException::new);
-
-
     }
 
-    private boolean isRussianVersion(Element elementId) {
-        return Pattern.compile(REGEX_PATTERN_RUSSIAN_VERSION)
-                .matcher(elementId.attr(ATTRIBUTE_HREF)).find();
-    }
-
-    private boolean isValidGame(Game game) {
-        return game.getGameBase().getPrice() != NO_VALID_PRICE_GAME;
-    }
 }

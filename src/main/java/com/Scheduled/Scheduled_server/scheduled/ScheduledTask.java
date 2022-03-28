@@ -18,7 +18,6 @@ public class ScheduledTask {
     @Scheduled(fixedRateString = "${fixedRate}")
     public void reportCurrentTime() throws IOException {
         gameService.loadGames(new Date());
-        System.err.println(gameService.getAll().size());
     }
 
 }
