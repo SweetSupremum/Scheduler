@@ -27,7 +27,7 @@ public class EpicGamesClient {
 
     public Pair<List<Game>, List<String>> loadGames() throws IOException {
         int pagesCount = pagesCount();
-        return EpicGamesClientHelper.totalGameLists(() ->
+        return EpicGamesClientHelper.totalGameLists(
                 IntStream
                         .range(PAGINATION_START, pagesCount)
                         .mapToObj(current -> START_URL + current * PAGINATION_STEP)
@@ -45,7 +45,7 @@ public class EpicGamesClient {
                                 }
                         )
                         .filter(EpicGamesClientHelper::isRussianVersion)
-                        .map(gameParser::parseGame).distinct());
+                        .map(gameParser::parseGame).distinct().collect(Collectors.toList()));
     }
 
 
