@@ -6,8 +6,10 @@ import org.jsoup.nodes.Element;
 import org.springframework.data.util.Pair;
 
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.Scheduled.Scheduled_server.utils.Constants.ATTRIBUTE_HREF;
 import static com.Scheduled.Scheduled_server.utils.Constants.NO_VALID_PRICE_GAME;
@@ -30,10 +32,11 @@ public class EpicGamesClientHelper {
     }
 
     public Pair<List<Game>, List<String>> totalGameLists(List<Game> games) {
-        return Pair.of(games.parallelStream()
+        Supplier<Stream<Game>> streamSupplier = games::parallelStream;
+        return Pair.of(streamSupplier.get()
                         .filter(EpicGamesClientHelper::isValidGame)
                         .collect(Collectors.toList()),
-                games.parallelStream()
+                streamSupplier.get()
                         .filter(EpicGamesClientHelper::isInvalidGame)
                         .map(Game::getId).collect(Collectors.toList()));
     }
