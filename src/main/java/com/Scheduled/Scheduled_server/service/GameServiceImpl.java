@@ -1,19 +1,19 @@
 package com.Scheduled.Scheduled_server.service;
 
 import com.Scheduled.Scheduled_server.dto.GameDto;
-import com.Scheduled.Scheduled_server.error.custom_exception.GameNotFoundException;
 import com.Scheduled.Scheduled_server.mapping.GameMapper;
 import com.Scheduled.Scheduled_server.model.Game;
 import com.Scheduled.Scheduled_server.parser.EpicGamesClient;
 import com.Scheduled.Scheduled_server.repository.GameHistoryRepository;
 import com.Scheduled.Scheduled_server.repository.GameRepository;
+import com.Scheduled.Scheduled_server.utils.GameServiceHelper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -27,61 +27,32 @@ public class GameServiceImpl {
 
     public GameDto get(String id) {
         return gameMapper.toDto(gameRepository.findById(id)
-                .orElseThrow(GameNotFoundException::new).getGameBase());
+                .orElse(new Game()).getGameBase());
     }
 
     public List<GameDto> getAll() {
-        return Optional.of(gameMapper.toDtos(gameRepository.findAll()
-                .stream().map(Game::getGameBase)
-                .collect(Collectors.toList())))
-                .orElseThrow(GameNotFoundException::new);
+        return gameMapper.toDtos(gameRepository.findAll()
+                .stream().map(Game::getGameBase).collect(Collectors.toList()));
+
     }
 
     public void delete(String id) {
-        gameRepository
-                .findById(id)
-                .ifPresentOrElse((__) -> gameRepository.deleteById(id), GameNotFoundException::new);
+        gameRepository.deleteById(id);
     }
 
 
-    public void loadGames(Date currentDate) throws IOException {
-        List<Game> currentGames = epicGamesClient.loadGames();
-        List<Game> oldGames = gameRepository.findAll();
-        List<Game> addOrUpdate = currentGames.stream().filter(game -> !oldGames.contains(game)).collect(Collectors.toList());
-        List<Game> update = oldGames
-                .stream()
-                .filter(game ->
-                        addOrUpdate
-                                .stream()
-                                .map(Game::getId)
-                                .collect(Collectors.toList())
-                                .contains(game.getId()))
-                .collect(Collectors.toList());
-        List<Game> add = addOrUpdate.stream().filter(game -> !update.contains(game)).collect(Collectors.toList());
-        gameRepository.deleteAll(oldGames.stream().filter(game -> !currentGames.contains(game)).collect(Collectors.toList()));
-        gameRepository.saveAll(addOrUpdate);
-        addGame(add, currentDate);
-        updateGame(update, currentDate);
-
+    public void rebootGames(ZonedDateTime currentDate) throws IOException {
+        Pair<List<Game>, List<Game>> rebootList = GameServiceHelper.RebootLists(epicGamesClient.loadGames(), gameRepository.findAll());
+        List<Game> leaveGamesLists = rebootList.getSecond();
+        gameRepository.deleteAll(rebootList.getFirst());
+        gameRepository.saveAll(leaveGamesLists);
+        saveAllGameHistories(leaveGamesLists, currentDate);
     }
 
-    private void updateGame(List<Game> update, Date currentDate) {
-        if (!update.isEmpty()) gameHistoryRepository.saveAll(update.parallelStream()
+    public void saveAllGameHistories(List<Game> games, ZonedDateTime created) {
+        if (!games.isEmpty()) gameHistoryRepository.saveAll(games.parallelStream()
                 .map(game -> gameMapper
-                        .createOrUpdate(
-                                game,
-                                gameHistoryRepository
-                                        .getFirstByIdLinkOrderByUpdatedAsc(game.getGameBase().getLink()).getCreated(),
-                                currentDate)
+                        .create(game, created)
                 ).collect(Collectors.toList()));
     }
-
-    private void addGame(List<Game> addGames, Date created) {
-        if (!addGames.isEmpty()) gameHistoryRepository.saveAll(addGames.parallelStream()
-                .map(game -> gameMapper
-                        .createOrUpdate(game, created, created)
-                ).collect(Collectors.toList()));
-    }
-
-
 }

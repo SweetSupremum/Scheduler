@@ -4,6 +4,7 @@ import com.Scheduled.Scheduled_server.model.Game;
 import com.Scheduled.Scheduled_server.utils.EpicGamesClientHelper;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -24,26 +25,27 @@ import static com.Scheduled.Scheduled_server.utils.Constants.START_URL;
 public class EpicGamesClient {
     private final GameParser gameParser;
 
-    public List<Game> loadGames() throws IOException {
-        return IntStream
-                .range(PAGINATION_START, pagesCount())
-                .mapToObj(current -> START_URL + current * PAGINATION_STEP)
-                .collect(Collectors.toList())
-                .parallelStream()
-                .flatMap(url -> {
-                            try {
-                                return Jsoup.connect(url).get()
-                                        .select(SELECTOR_GAMES).parallelStream();
+    public Pair<List<Game>, List<String>> loadGames() throws IOException {
+        int pagesCount = pagesCount();
+        return EpicGamesClientHelper.totalGameLists(() ->
+                IntStream
+                        .range(PAGINATION_START, pagesCount)
+                        .mapToObj(current -> START_URL + current * PAGINATION_STEP)
+                        .collect(Collectors.toList())
+                        .parallelStream()
+                        .flatMap(url -> {
+                                    try {
+                                        return Jsoup.connect(url).get()
+                                                .select(SELECTOR_GAMES).parallelStream();
 
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                                return Stream.empty();
-                            }
-                        }
-                )
-                .filter(EpicGamesClientHelper::isRussianVersion)
-                .map(gameParser::parseGame)
-                .filter(EpicGamesClientHelper::isValidGame).distinct().collect(Collectors.toList());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                        return Stream.empty();
+                                    }
+                                }
+                        )
+                        .filter(EpicGamesClientHelper::isRussianVersion)
+                        .map(gameParser::parseGame).distinct());
     }
 
 

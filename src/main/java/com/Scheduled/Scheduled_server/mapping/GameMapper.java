@@ -8,7 +8,7 @@ import com.Scheduled.Scheduled_server.model.GameHistory;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Mapper
@@ -18,7 +18,7 @@ public interface GameMapper {
     List<GameDto> toDtos(List<GameBase> games);
 
     @Mapping(target = "id", source = "game.gameBase")
-    GameHistory createOrUpdate(Game game, Date created, Date updated);
+    GameHistory create(Game game, ZonedDateTime created);
 
 }
 

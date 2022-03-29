@@ -7,7 +7,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Date;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Component
 @RequiredArgsConstructor
@@ -17,7 +18,8 @@ public class ScheduledTask {
     // cron = "@hourly"
     @Scheduled(fixedRateString = "${fixedRate}")
     public void reportCurrentTime() throws IOException {
-        gameService.loadGames(new Date());
+        gameService.rebootGames(ZonedDateTime.now(ZoneId.of("Z")));
+        System.err.println(gameService.getAll().size());
     }
 
 }

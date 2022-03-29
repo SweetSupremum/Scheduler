@@ -7,6 +7,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface GameHistoryRepository extends JpaRepository<GameHistory, GameBase> {
-    GameHistory getFirstByIdLinkOrderByUpdatedAsc(String link);
-
 }

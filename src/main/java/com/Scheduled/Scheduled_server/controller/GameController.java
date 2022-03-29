@@ -2,8 +2,8 @@ package com.Scheduled.Scheduled_server.controller;
 
 
 import com.Scheduled.Scheduled_server.service.GameServiceImpl;
+import com.Scheduled.Scheduled_server.utils.ResponseHelper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,17 +20,17 @@ public class GameController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> get(@PathVariable String id) {
-        return new ResponseEntity<>(gameService.get(id), HttpStatus.OK);
+        return ResponseHelper.get(gameService.get(id));
     }
 
     @GetMapping
     public ResponseEntity<?> getAll() {
-        return new ResponseEntity<>(gameService.getAll(), HttpStatus.OK);
+        return ResponseHelper.getAll(gameService.getAll());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable String id) {
         gameService.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseHelper.delete();
     }
 }

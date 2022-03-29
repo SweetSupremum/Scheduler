@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_primary_key-game_history
+      author: Sweet Supremum
+      changes:
+        - addPrimaryKey:
+            catalogName: schemas
+            clustered: true
+            columnNames: name, price, discount_price, discount_percent, link, image
+            constraintName: pk_game_history
+            schemaName: public
+            tableName: game_history
+            validate: true

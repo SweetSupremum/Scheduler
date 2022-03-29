@@ -15,6 +15,7 @@ import static com.Scheduled.Scheduled_server.utils.Constants.HTML_SPACES;
 import static com.Scheduled.Scheduled_server.utils.Constants.LINK_STORE_EPIC_GAMES;
 import static com.Scheduled.Scheduled_server.utils.Constants.REGEX_PATTERN_DISCOUNT_PERCENT;
 import static com.Scheduled.Scheduled_server.utils.Constants.REGEX_PATTERN_FREE;
+import static com.Scheduled.Scheduled_server.utils.Constants.REGEX_PATTERN_ID;
 import static com.Scheduled.Scheduled_server.utils.Constants.REGEX_PATTERN_PRICE;
 import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_DISCOUNT_PRICE;
 import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_FLAG_DISCOUNT;
@@ -23,15 +24,14 @@ import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_PRICE;
 import static com.Scheduled.Scheduled_server.utils.Constants.SELECT_DISCOUNT_PERCENT;
 import static com.Scheduled.Scheduled_server.utils.Constants.SEPARATOR_COMMA;
 import static com.Scheduled.Scheduled_server.utils.Constants.SEPARATOR_DOT;
-import static com.Scheduled.Scheduled_server.utils.Constants.SEPARATOR_SLASH;
 import static com.Scheduled.Scheduled_server.utils.Constants.TAG_IMAGE;
 
 @Component
 public class GameParser {
 
     private String parseId(Element element) {
-        return element.attr(ATTRIBUTE_HREF)
-                .replaceFirst(SEPARATOR_SLASH, Strings.EMPTY);
+        return element.attr(ATTRIBUTE_HREF).
+                replaceAll(REGEX_PATTERN_ID, Strings.EMPTY);
     }
 
     private String parseName(Element element) {
@@ -78,11 +78,11 @@ public class GameParser {
     public Game parseGame(Element element) {
         String link = parseId(element);
         GameBase gameBase = new GameBase(parseName(element), parsePrice(element), parseLink(link), parseImage(element));
-        setDiscountIsNotEmpty(gameBase, element);
+        insertDiscount(gameBase, element);
         return new Game(link, gameBase);
     }
 
-    private void setDiscountIsNotEmpty(GameBase gameBase, Element element) {
+    private void insertDiscount(GameBase gameBase, Element element) {
         if (element.selectFirst(SELECTOR_FLAG_DISCOUNT) != null) {
             gameBase.setDiscountPrice(parseDiscountPrice(element));
             gameBase.setDiscountPercent(parseDiscountPercent(element));

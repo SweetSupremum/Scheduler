@@ -12,11 +12,6 @@ databaseChangeLog:
                   constraints:
                     nullable: true
               - column:
-                  name: updated
-                  type: TIMESTAMP
-                  constraints:
-                    nullable: true
-              - column:
                   name: name
                   type: varchar(500)
                   constraints:
@@ -46,16 +41,4 @@ databaseChangeLog:
                   type: varchar(1000)
                   constraints:
                     nullable: true
-  - changeSet:
-      id: add_primary_key-game_history
-      author: SweetSupremum
-      changes:
-        - addPrimaryKey:
-            catalogName: schemas
-            clustered: true
-            columnNames: name, price, discount_price, discount_percent, link, image
-            constraintName: pk_game_history
-            schemaName: public
-            tableName: game_history
-            validate: true
 

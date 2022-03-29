@@ -6,17 +6,17 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 
 @Entity
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode(exclude = {"created", "updated"})
+@EqualsAndHashCode(exclude = {"created"})
 public class GameHistory {
     @EmbeddedId
     private GameBase id;
-    private Date created;
-    private Date updated;
+    private ZonedDateTime created;
+
 
 }
