@@ -23,6 +23,6 @@ public interface Constants {
     String ATTRIBUTE_HREF = "href";
     String SEPARATOR_COMMA = ",";
     String SEPARATOR_DOT = ".";
-    int NO_VALID_PRICE_GAME = -1;
+    double NO_VALID_PRICE_GAME = -1;
 
 }

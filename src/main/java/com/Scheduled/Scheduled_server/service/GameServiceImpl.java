@@ -42,7 +42,7 @@ public class GameServiceImpl {
 
 
     public void rebootGames(ZonedDateTime currentDate) throws IOException {
-        Pair<List<Game>, List<Game>> rebootList = GameServiceHelper.RebootLists(epicGamesClient.loadGames(), gameRepository.findAll());
+        Pair<List<Game>, List<Game>> rebootList = GameServiceHelper.rebootLists(epicGamesClient.loadGames(), gameRepository.findAll());
         List<Game> leaveGamesLists = rebootList.getSecond();
         gameRepository.deleteAll(rebootList.getFirst());
         gameRepository.saveAll(leaveGamesLists);

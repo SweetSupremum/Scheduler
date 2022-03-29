@@ -13,6 +13,7 @@ import static com.Scheduled.Scheduled_server.utils.Constants.ATTRIBUTE_DATA_IMAG
 import static com.Scheduled.Scheduled_server.utils.Constants.ATTRIBUTE_HREF;
 import static com.Scheduled.Scheduled_server.utils.Constants.HTML_SPACES;
 import static com.Scheduled.Scheduled_server.utils.Constants.LINK_STORE_EPIC_GAMES;
+import static com.Scheduled.Scheduled_server.utils.Constants.NO_VALID_PRICE_GAME;
 import static com.Scheduled.Scheduled_server.utils.Constants.REGEX_PATTERN_DISCOUNT_PERCENT;
 import static com.Scheduled.Scheduled_server.utils.Constants.REGEX_PATTERN_FREE;
 import static com.Scheduled.Scheduled_server.utils.Constants.REGEX_PATTERN_ID;
@@ -54,7 +55,7 @@ public class GameParser {
             currentPrice.append(matcher.group());
         }
         if (currentPrice.toString().equals(Strings.EMPTY)) {
-            return -1;
+            return NO_VALID_PRICE_GAME;
         }
         return Double.parseDouble(currentPrice.toString()
                 .replaceAll(HTML_SPACES, Strings.EMPTY).replaceAll(SEPARATOR_COMMA, SEPARATOR_DOT));
