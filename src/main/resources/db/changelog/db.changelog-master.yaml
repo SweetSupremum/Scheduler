@@ -1,7 +1,5 @@
 databaseChangeLog:
   - include:
-      file: db/changelog/changeset/create-game-table.yaml
+      file: db/changelog/changeset/create-customers-table.yaml
   - include:
-      file: db/changelog/changeset/create-game-history-table.yaml
-  - include:
-      file: db/changelog/changeset/add-PK-game-history-table.yaml
+      file: db/changelog/changeset/create-table-game-library.yaml

@@ -28,14 +28,14 @@ public class GameServiceHelper {
 
     private List<Game> leaveGamesLists(List<Game> oldGames, List<Game> newGames) {
         return newGames
-                .parallelStream()
+                .stream()
                 .filter(game -> noContainsOldGames(oldGames, game))
                 .collect(Collectors.toList());
     }
 
     private List<Game> throwGamesList(List<Game> oldGames, Pair<List<Game>, List<String>> gamesAndInvalidIds) {
         return oldGames
-                .parallelStream()
+                .stream()
                 .filter(game -> deleteFlag(gamesAndInvalidIds.getFirst(), gamesAndInvalidIds.getSecond(), game))
                 .collect(Collectors.toList());
     }

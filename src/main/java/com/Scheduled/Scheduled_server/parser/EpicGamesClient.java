@@ -26,10 +26,10 @@ public class EpicGamesClient {
     private final GameParser gameParser;
 
     public Pair<List<Game>, List<String>> loadGames() throws IOException {
-        int pagesCount = pagesCount();
+        System.out.println(pagesCount());
         return EpicGamesClientHelper.totalGameLists(
                 IntStream
-                        .range(PAGINATION_START, pagesCount)
+                        .range(PAGINATION_START, pagesCount())
                         .mapToObj(current -> START_URL + current * PAGINATION_STEP)
                         .collect(Collectors.toList())
                         .parallelStream()

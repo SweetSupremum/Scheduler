@@ -1,0 +1,65 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-game-libraries-table
+      author: Sweet Supremum
+      changes:
+        - createTable:
+            tableName: game_library
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: game_id
+                  type: varchar(500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: customer_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: create-foreignKey-customers
+      author: Sweet Supremum
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: customer_id
+            baseTableCatalogName: Scheduler
+            baseTableName: game_library
+            baseTableSchemaName: public
+            constraintName: fk_game_library_customer
+            deferrable: true
+            initiallyDeferred: true
+            onDelete: CASCADE
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableCatalogName: Scheduler
+            referencedTableName: customer
+            referencedTableSchemaName: public
+            validate: true
+
+  - changeSet:
+      id: create-foreignKey-game
+      author: Sweet Supremum
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: game_id
+            baseTableCatalogName: Scheduler
+            baseTableName: game_library
+            baseTableSchemaName: public
+            constraintName: fk_game_library_game
+            deferrable: true
+            initiallyDeferred: true
+            onDelete: CASCADE
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableCatalogName: Scheduler
+            referencedTableName: game
+            referencedTableSchemaName: public
+            validate: true

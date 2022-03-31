@@ -32,7 +32,8 @@ public class EpicGamesClientHelper {
     }
 
     public Pair<List<Game>, List<String>> totalGameLists(List<Game> games) {
-        Supplier<Stream<Game>> streamSupplier = games::parallelStream;
+        System.out.println(games.size());
+        Supplier<Stream<Game>> streamSupplier = games::stream;
         return Pair.of(streamSupplier.get()
                         .filter(EpicGamesClientHelper::isValidGame)
                         .collect(Collectors.toList()),

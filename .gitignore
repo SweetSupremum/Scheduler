@@ -35,3 +35,5 @@ build/
 .vscode/
 ### myFile ###
 src/main/java/com/Scheduled/Scheduled_server/test.java
+src/main/resources/templates/game_table.js
+src/main/resources/templates/index.html

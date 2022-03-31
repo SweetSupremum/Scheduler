@@ -5,6 +5,7 @@ import com.Scheduled.Scheduled_server.service.GameServiceImpl;
 import com.Scheduled.Scheduled_server.utils.ResponseHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,11 +20,13 @@ public class GameController {
     private final GameServiceImpl gameService;
 
     @GetMapping("/{id}")
+    @CrossOrigin
     public ResponseEntity<?> get(@PathVariable String id) {
         return ResponseHelper.get(gameService.get(id));
     }
 
     @GetMapping
+    @CrossOrigin
     public ResponseEntity<?> getAll() {
         return ResponseHelper.getAll(gameService.getAll());
     }
