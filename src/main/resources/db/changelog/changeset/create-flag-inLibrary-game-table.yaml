@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-flag-game-table
+      author: Sweet Supremum
+      changes:
+        - addColumn:
+            tableName: game
+            columns:
+              - column:
+                  name: in_library
+                  type: boolean
+                  defaultValue:  false

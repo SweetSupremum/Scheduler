@@ -15,51 +15,36 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: game_id
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
                   type: varchar(500)
                   constraints:
                     nullable: false
               - column:
-                  name: customer_id
-                  type: bigint
+                  name: price
+                  type: Numeric
                   constraints:
                     nullable: false
-
-  - changeSet:
-      id: create-foreignKey-customers
-      author: Sweet Supremum
-      changes:
-        - addForeignKeyConstraint:
-            baseColumnNames: customer_id
-            baseTableCatalogName: Scheduler
-            baseTableName: game_library
-            baseTableSchemaName: public
-            constraintName: fk_game_library_customer
-            deferrable: true
-            initiallyDeferred: true
-            onDelete: CASCADE
-            onUpdate: CASCADE
-            referencedColumnNames: id
-            referencedTableCatalogName: Scheduler
-            referencedTableName: customer
-            referencedTableSchemaName: public
-            validate: true
-
-  - changeSet:
-      id: create-foreignKey-game
-      author: Sweet Supremum
-      changes:
-        - addForeignKeyConstraint:
-            baseColumnNames: game_id
-            baseTableCatalogName: Scheduler
-            baseTableName: game_library
-            baseTableSchemaName: public
-            constraintName: fk_game_library_game
-            deferrable: true
-            initiallyDeferred: true
-            onDelete: CASCADE
-            onUpdate: CASCADE
-            referencedColumnNames: id
-            referencedTableCatalogName: Scheduler
-            referencedTableName: game
-            referencedTableSchemaName: public
-            validate: true
+              - column:
+                  name: discount_price
+                  type: Numeric
+                  constraints:
+                    nullable: true
+              - column:
+                  name: image
+                  type: varchar(1000)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: discount_percent
+                  type: bigint
+                  constraints:
+                    nullable: true
+              - column:
+                  name: link
+                  type: varchar(1000)
+                  constraints:
+                    nullable: true

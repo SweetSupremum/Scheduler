@@ -21,4 +21,5 @@ public class ApiExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+
 }
