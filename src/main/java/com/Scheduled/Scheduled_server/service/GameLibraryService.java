@@ -1,7 +1,6 @@
 package com.Scheduled.Scheduled_server.service;
 
-import com.Scheduled.Scheduled_server.dto.GameDto;
-import com.Scheduled.Scheduled_server.error.advice.custom.GameNotFoundException;
+import com.Scheduled.Scheduled_server.dto.GameLibraryDto;
 import com.Scheduled.Scheduled_server.mapping.GameMapper;
 import com.Scheduled.Scheduled_server.model.Game;
 import com.Scheduled.Scheduled_server.model.GameLibrary;
@@ -24,31 +23,25 @@ public class GameLibraryService {
     public List<GameLibrary> init() {
         return gameLibraryRepository.saveAll(gameRepository.findAll().stream()
                 .filter(game -> game.getId().hashCode() % 8 == 0)
-                .peek(game -> game.setInLibrary(true))
-                .map(game -> {
-                    GameLibrary gameLibrary = new GameLibrary(game.getGameBase());
-                    gameLibrary.setGameId(game.getId());
-                    return gameLibrary;
-                })
+                .map(game -> new GameLibrary(game.getId()))
                 .collect(Collectors.toList()));
     }
 
-    public GameDto add(GameDto gameDto) {
-        Game game = gameRepository
-                .findByGameBaseLink(gameDto.getLink())
-                .orElseThrow(GameNotFoundException::new);
-        return gameMapper.toDto(gameLibraryRepository
-                .save(gameMapper
-                        .gameToGameLibrary(game.getId(), game.getGameBase())).getGameBase());
+    public GameLibraryDto get(String gameId) {
+        List<String> gamesInLibrary = gameLibraryRepository
+                .findAll().stream().map(GameLibrary::getGameId)
+                .collect(Collectors.toList());
+        Game game = gameRepository.findById(gameId).orElse(new Game());
+        return gamesInLibrary.contains(game.getId()) ? gameMapper.gameToGameLibraryDto(game.getGameBase()) : null;
     }
 
-    public GameDto get(String gameId) {
-        return gameMapper.toDto(gameLibraryRepository.findByGameId(gameId).orElse(new GameLibrary()).getGameBase());
-    }
-
-    public List<GameDto> getAll() {
-        return gameLibraryRepository
-                .findAll().stream().map(gameLibrary -> gameMapper.toDto(gameLibrary.getGameBase())).collect(Collectors.toList());
+    public List<GameLibraryDto> getAll() {
+        List<String> gamesInLibrary = gameLibraryRepository.findAll().stream().map(GameLibrary::getGameId).collect(Collectors.toList());
+        return gameMapper.gameToGameLibraryDtos(gameRepository
+                .findAll()
+                .stream()
+                .filter(game -> gamesInLibrary.contains(game.getId()))
+                .map(Game::getGameBase).collect(Collectors.toList()));
     }
 
     public void delete() {

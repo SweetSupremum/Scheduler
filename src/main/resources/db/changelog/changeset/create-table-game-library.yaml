@@ -12,33 +12,4 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     nullable: false
-              - column:
-                  name: name
-                  type: varchar(500)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: price
-                  type: Numeric
-                  constraints:
-                    nullable: false
-              - column:
-                  name: discount_price
-                  type: Numeric
-                  constraints:
-                    nullable: true
-              - column:
-                  name: image
-                  type: varchar(1000)
-                  constraints:
-                    nullable: true
-              - column:
-                  name: discount_percent
-                  type: bigint
-                  constraints:
-                    nullable: true
-              - column:
-                  name: link
-                  type: varchar(1000)
-                  constraints:
-                    nullable: true
+
