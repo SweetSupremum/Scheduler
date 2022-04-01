@@ -1,7 +1,6 @@
 package com.Scheduled.Scheduled_server.controller;
 
-import com.Scheduled.Scheduled_server.dto.GameDto;
-import com.Scheduled.Scheduled_server.dto.GameLibraryDto;
+import com.Scheduled.Scheduled_server.model.GameLibrary;
 import com.Scheduled.Scheduled_server.service.GameLibraryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,19 +29,19 @@ public class GameLibraryController {
 
     @GetMapping("/{gameId}")
     public ResponseEntity<?> get(@PathVariable String gameId) {
-        GameLibraryDto gameLibrary = gameLibraryService.get(gameId);
+        GameLibrary gameLibrary = gameLibraryService.get(gameId);
         return gameLibrary != null ? ResponseEntity.ok(gameLibrary) : ResponseEntity.notFound().build();
     }
 
     @GetMapping("/games")
     public ResponseEntity<?> getAll() {
-        List<GameLibraryDto> gameDtos = gameLibraryService.getAll();
+        List<GameLibrary> gameDtos = gameLibraryService.getAll();
         return !gameDtos.isEmpty() ? ResponseEntity.ok(gameDtos) : ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/game")
-    public ResponseEntity<?> add(@RequestBody GameDto gameDto) {
-        return ResponseEntity.ok(gameLibraryService.add(gameDto));
+    @PostMapping
+    public ResponseEntity<?> add(@RequestBody GameLibrary gameLibrary) {
+        return ResponseEntity.ok(gameLibraryService.add(gameLibrary));
     }
 
     @DeleteMapping("/delete")

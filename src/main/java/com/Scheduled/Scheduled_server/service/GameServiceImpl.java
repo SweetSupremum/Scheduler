@@ -24,15 +24,23 @@ public class GameServiceImpl {
     private final GameMapper gameMapper;
     private final GameHistoryRepository gameHistoryRepository;
     private final EpicGamesClient epicGamesClient;
+    private final GameLibraryService gameLibraryService;
 
     public GameDto get(String id) {
-        return gameMapper.toDto(gameRepository.findById(id)
-                .orElse(new Game()).getGameBase());
+        return gameRepository
+                .findById(id)
+                .map((game -> gameMapper.toDto(game, gameLibraryService.getAllIds().contains(game.getId()))))
+                .orElse(null);
+
     }
 
     public List<GameDto> getAll() {
-        return gameMapper.toDtos(gameRepository.findAll()
-                .stream().map(Game::getGameBase).collect(Collectors.toList()));
+        List<String> gamesInLibrary = gameLibraryService.getAllIds();
+        return gameRepository
+                .findAll()
+                .stream()
+                .map(game -> gameMapper.toDto(game, gamesInLibrary.contains(game.getId())))
+                .collect(Collectors.toList());
 
     }
 

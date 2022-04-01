@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class GameController {
     private final GameServiceImpl gameService;
-
     @GetMapping("/{id}")
     @CrossOrigin
     public ResponseEntity<?> get(@PathVariable String id) {

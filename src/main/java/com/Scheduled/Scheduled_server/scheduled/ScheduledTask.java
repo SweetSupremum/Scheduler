@@ -19,7 +19,7 @@ public class ScheduledTask {
     @Scheduled(fixedRateString = "${fixedRate}")
     public void reportCurrentTime() throws IOException {
         gameService.rebootGames(ZonedDateTime.now(ZoneId.of("Z")));
-        System.err.println(gameService.getAll().size());
+        /*System.err.println(gameService.getAll().size());*/
     }
 
 }
