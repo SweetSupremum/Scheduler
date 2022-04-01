@@ -1,6 +1,9 @@
 package com.Scheduled.Scheduled_server.service;
 
+import com.Scheduled.Scheduled_server.dto.GameDto;
 import com.Scheduled.Scheduled_server.dto.GameLibraryDto;
+import com.Scheduled.Scheduled_server.error.advice.custom.AlreadyInLibraryException;
+import com.Scheduled.Scheduled_server.error.advice.custom.GameNotFoundException;
 import com.Scheduled.Scheduled_server.mapping.GameMapper;
 import com.Scheduled.Scheduled_server.model.Game;
 import com.Scheduled.Scheduled_server.model.GameLibrary;
@@ -37,14 +40,28 @@ public class GameLibraryService {
 
     public List<GameLibraryDto> getAll() {
         List<String> gamesInLibrary = gameLibraryRepository.findAll().stream().map(GameLibrary::getGameId).collect(Collectors.toList());
-        return gameMapper.gameToGameLibraryDtos(gameRepository
-                .findAll()
-                .stream()
+        List<Game> allGames = gameRepository.findAll();
+        List<GameLibraryDto> containsInLibrary = allGames.stream()
                 .filter(game -> gamesInLibrary.contains(game.getId()))
-                .map(Game::getGameBase).collect(Collectors.toList()));
+                .map(game -> gameMapper.gameToGameLibraryDto(game.getGameBase()))
+                .peek(gameLibraryDto -> gameLibraryDto.setInLibrary(true)).collect(Collectors.toList());
+        List<GameLibraryDto> totalList = allGames.stream()
+                .filter(game -> gamesInLibrary.contains(game.getId()))
+                .map(game -> gameMapper.gameToGameLibraryDto(game.getGameBase()))
+                .peek(gameLibraryDto -> gameLibraryDto.setInLibrary(false)).collect(Collectors.toList());
+        totalList.addAll(containsInLibrary);
+        return totalList;
     }
 
     public void delete() {
         gameLibraryRepository.deleteAllInBatch();
+    }
+
+    public GameLibraryDto add(GameDto gameDto) {
+        List<String> gamesInLibrary = gameLibraryRepository.findAll().stream().map(GameLibrary::getGameId).collect(Collectors.toList());
+        Game game = gameRepository.findByGameBaseLink(gameDto.getLink()).orElseThrow(GameNotFoundException::new);
+        if (gamesInLibrary.contains(game.getId())) throw new AlreadyInLibraryException();
+        return gameMapper.gameToGameLibraryDto(game.getGameBase());
+
     }
 }

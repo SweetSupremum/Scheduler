@@ -18,7 +18,6 @@ public interface GameMapper {
 
     List<GameDto> toDtos(List<GameBase> games);
 
-    @Mapping(target = "inLibrary", constant = "true")
     GameLibraryDto gameToGameLibraryDto(GameBase gameBase);
 
     List<GameLibraryDto> gameToGameLibraryDtos(List<GameBase> gameBase);

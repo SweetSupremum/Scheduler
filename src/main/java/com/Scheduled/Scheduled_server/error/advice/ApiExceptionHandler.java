@@ -1,5 +1,6 @@
 package com.Scheduled.Scheduled_server.error.advice;
 
+import com.Scheduled.Scheduled_server.error.advice.custom.AlreadyInLibraryException;
 import com.Scheduled.Scheduled_server.error.advice.custom.GameNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,15 +22,25 @@ public class ApiExceptionHandler {
                 ZonedDateTime.now(ZoneId.of("Z"))),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
     @ExceptionHandler(value = GameNotFoundException.class)
     public ResponseEntity<?> gameNotFoundException(GameNotFoundException e) {
         return new ResponseEntity<>(new ApiException(
                 "game Not found",
                 e,
-                HttpStatus.INTERNAL_SERVER_ERROR,
+                HttpStatus.NOT_FOUND,
                 ZonedDateTime.now(ZoneId.of("Z"))),
-                HttpStatus.INTERNAL_SERVER_ERROR);
+                HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = AlreadyInLibraryException.class)
+    public ResponseEntity<?> alreadyInLibraryException(AlreadyInLibraryException e) {
+        return new ResponseEntity<>(new ApiException(
+                "already there",
+                e,
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                ZonedDateTime.now(ZoneId.of("Z"))),
+                HttpStatus.BAD_REQUEST);
 
+    }
 }
