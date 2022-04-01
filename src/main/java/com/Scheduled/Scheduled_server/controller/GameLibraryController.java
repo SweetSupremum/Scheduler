@@ -33,7 +33,7 @@ public class GameLibraryController {
         return gameLibrary != null ? ResponseEntity.ok(gameLibrary) : ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/games")
+    @GetMapping
     public ResponseEntity<?> getAll() {
         List<GameLibrary> gameDtos = gameLibraryService.getAll();
         return !gameDtos.isEmpty() ? ResponseEntity.ok(gameDtos) : ResponseEntity.notFound().build();
