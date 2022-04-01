@@ -1,3 +1,11 @@
 databaseChangeLog:
   - include:
+      file: db/changelog/changeset/create-game-table.yaml
+  - include:
+      file: db/changelog/changeset/create-game-history-table.yaml
+  - include:
+      file: db/changelog/changeset/add-PK-game-history-table.yaml
+  - include:
+      file: db/changelog/changeset/create-table-game-library.yaml
+  - include:
       file: db/changelog/changeset/create-flag-inLibrary-game-table.yaml
