@@ -3,7 +3,7 @@ package com.Scheduled.Scheduled_server.service;
 import com.Scheduled.Scheduled_server.dto.GameDto;
 import com.Scheduled.Scheduled_server.mapping.GameMapper;
 import com.Scheduled.Scheduled_server.model.Game;
-import com.Scheduled.Scheduled_server.parser.EpicGamesClient;
+import com.Scheduled.Scheduled_server.model.GameHistoryId;
 import com.Scheduled.Scheduled_server.repository.GameHistoryRepository;
 import com.Scheduled.Scheduled_server.repository.GameRepository;
 import com.Scheduled.Scheduled_server.utils.GameServiceHelper;
@@ -59,8 +59,7 @@ public class GameServiceImpl {
 
     public void saveAllGameHistories(List<Game> games, ZonedDateTime created) {
         if (!games.isEmpty()) gameHistoryRepository.saveAll(games.parallelStream()
-                .map(game -> gameMapper
-                        .create(game, created)
+                .map(game -> gameMapper.toGameHistory(game, new GameHistoryId(created, game.getId()))
                 ).collect(Collectors.toList()));
     }
 }

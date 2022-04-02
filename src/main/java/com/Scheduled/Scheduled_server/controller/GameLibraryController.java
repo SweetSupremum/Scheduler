@@ -4,15 +4,9 @@ import com.Scheduled.Scheduled_server.model.GameLibrary;
 import com.Scheduled.Scheduled_server.service.GameLibraryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -22,26 +16,28 @@ import java.util.List;
 public class GameLibraryController {
     private final GameLibraryService gameLibraryService;
 
-    @PostMapping("/init")
-    public ResponseEntity<?> add() {
-        return ResponseEntity.ok(gameLibraryService.init());
-    }
-
     @GetMapping("/{gameId}")
     public ResponseEntity<?> get(@PathVariable String gameId) {
         GameLibrary gameLibrary = gameLibraryService.get(gameId);
-        return gameLibrary != null ? ResponseEntity.ok(gameLibrary) : ResponseEntity.notFound().build();
+        if (gameLibrary == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(gameLibrary);
     }
 
     @GetMapping
     public ResponseEntity<?> getAll() {
         List<GameLibrary> gameDtos = gameLibraryService.getAll();
-        return !gameDtos.isEmpty() ? ResponseEntity.ok(gameDtos) : ResponseEntity.notFound().build();
+        if (gameDtos.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(gameDtos);
     }
 
     @PostMapping
     public ResponseEntity<?> add(@RequestBody GameLibrary gameLibrary) {
-        return ResponseEntity.ok(gameLibraryService.add(gameLibrary));
+        gameLibraryService.add(gameLibrary);
+        return ResponseEntity.created(URI.create(String.format("library/%s", gameLibrary.getGameId()))).body(gameLibrary);
     }
 
     @DeleteMapping("/delete")

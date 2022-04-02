@@ -1,7 +1,6 @@
 package com.Scheduled.Scheduled_server.parser;
 
 import com.Scheduled.Scheduled_server.model.Game;
-import com.Scheduled.Scheduled_server.model.GameBase;
 import org.apache.logging.log4j.util.Strings;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Component;
@@ -30,9 +29,10 @@ import static com.Scheduled.Scheduled_server.utils.Constants.TAG_IMAGE;
 @Component
 public class GameParser {
 
-    private String parseId(Element element) {
-        return element.attr(ATTRIBUTE_HREF).
-                replaceAll(REGEX_PATTERN_ID, Strings.EMPTY);
+
+
+    private String parseId(String link) {
+        return link.replaceAll(REGEX_PATTERN_ID, Strings.EMPTY);
     }
 
     private String parseName(Element element) {
@@ -61,13 +61,12 @@ public class GameParser {
                 .replaceAll(HTML_SPACES, Strings.EMPTY).replaceAll(SEPARATOR_COMMA, SEPARATOR_DOT));
     }
 
-    private String parseLink(String link) {
-        return LINK_STORE_EPIC_GAMES + link;
+    private String getLink(Element element) {
+        return element.attr(ATTRIBUTE_HREF);
     }
 
     private String parseImage(Element element) {
-        return element
-                .selectFirst(TAG_IMAGE).attr(ATTRIBUTE_DATA_IMAGE);
+        return element.selectFirst(TAG_IMAGE).attr(ATTRIBUTE_DATA_IMAGE);
     }
 
     private Integer parseDiscountPercent(Element element) {
@@ -77,19 +76,22 @@ public class GameParser {
     }
 
     public Game parseGame(Element element) {
-        String link = parseId(element);
-        GameBase gameBase = new GameBase(parseName(element), parsePrice(element), parseLink(link), parseImage(element));
-        insertDiscount(gameBase, element);
-        return new Game(link, gameBase);
+        String link = getLink(element);
+
+        Game game = new Game();
+        game.setId(parseId(link));
+        game.setName(parseName(element));
+        game.setPrice(parsePrice(element));
+        game.setLink(LINK_STORE_EPIC_GAMES + link);
+        game.setImage(parseImage(element));
+        if (element.selectFirst(SELECTOR_FLAG_DISCOUNT) != null) {
+            game.setDiscountPrice(parseDiscountPrice(element));
+            game.setDiscountPercent(parseDiscountPercent(element));
+        } else {
+            game.setDiscountPercent(0);
+            game.setDiscountPrice(parsePrice(element));
+        }
+        return game;
     }
 
-    private void insertDiscount(GameBase gameBase, Element element) {
-        if (element.selectFirst(SELECTOR_FLAG_DISCOUNT) != null) {
-            gameBase.setDiscountPrice(parseDiscountPrice(element));
-            gameBase.setDiscountPercent(parseDiscountPercent(element));
-        } else {
-            gameBase.setDiscountPercent(0);
-            gameBase.setDiscountPrice(parsePrice(element));
-        }
-    }
 }

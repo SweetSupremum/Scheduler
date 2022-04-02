@@ -24,7 +24,7 @@ public class EpicGamesClientHelper {
     }
 
     public boolean isValidGame(Game game) {
-        return game.getGameBase().getPrice() != NO_VALID_PRICE_GAME;
+        return game.getPrice() != NO_VALID_PRICE_GAME;
     }
 
     public boolean isInvalidGame(Game game) {

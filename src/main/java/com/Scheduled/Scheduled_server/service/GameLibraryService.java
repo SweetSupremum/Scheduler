@@ -19,13 +19,6 @@ public class GameLibraryService {
     private final GameLibraryRepository gameLibraryRepository;
 
 
-    public List<GameLibrary> init() {
-        return gameLibraryRepository.saveAll(gameRepository.findAll().stream()
-                .filter(game -> game.getId().hashCode() % 8 == 0)
-                .map(game -> new GameLibrary(game.getId()))
-                .collect(Collectors.toList()));
-    }
-
     public GameLibrary get(String gameId) {
         return gameLibraryRepository.findById(gameId).orElse(null);
     }
@@ -42,17 +35,15 @@ public class GameLibraryService {
         gameLibraryRepository.deleteAllInBatch();
     }
 
-    public GameLibrary add(GameLibrary gameLibrary) {
-        gameLibraryRepository
-                .findById(gameRepository
-                        .findById(gameLibrary.getGameId())
-                        .map(Game::getId).orElseThrow(GameNotFoundException::new))
-                .ifPresentOrElse((item) -> {
+    public void add(GameLibrary gameLibrary) {
+        String gameId = gameRepository
+                .findById(gameLibrary.getGameId())
+                .map(Game::getId).orElseThrow(GameNotFoundException::new);
+        gameLibraryRepository.findById(gameId)
+                .ifPresentOrElse((__) -> {
                             throw new AlreadyInLibraryException();
-                        }
-                        , () -> gameLibraryRepository.save(gameLibrary)
-                );
+                        },
+                        () -> gameLibraryRepository.save(gameLibrary));
 
-        return gameLibrary;
     }
 }

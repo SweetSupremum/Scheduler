@@ -12,6 +12,11 @@ databaseChangeLog:
                   constraints:
                     nullable: true
               - column:
+                  name: game_id
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
                   name: name
                   type: varchar(500)
                   constraints:

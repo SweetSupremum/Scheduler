@@ -5,8 +5,8 @@ databaseChangeLog:
       changes:
         - addPrimaryKey:
             catalogName: schemas
-            clustered: true
-            columnNames: name, price, discount_price, discount_percent, link, image
+            clustered:  true
+            columnNames: game_id, created
             constraintName: pk_game_history
             schemaName: public
             tableName: game_history

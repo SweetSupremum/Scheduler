@@ -1,16 +1,13 @@
 package com.Scheduled.Scheduled_server.controller;
 
 
+import com.Scheduled.Scheduled_server.dto.GameDto;
 import com.Scheduled.Scheduled_server.service.GameServiceImpl;
-import com.Scheduled.Scheduled_server.utils.ResponseHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -18,21 +15,31 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class GameController {
     private final GameServiceImpl gameService;
+
     @GetMapping("/{id}")
     @CrossOrigin
     public ResponseEntity<?> get(@PathVariable String id) {
-        return ResponseHelper.get(gameService.get(id));
+        GameDto gameDto = gameService.get(id);
+        if (gameDto == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(gameDto);
     }
 
     @GetMapping
     @CrossOrigin
     public ResponseEntity<?> getAll() {
-        return ResponseHelper.getAll(gameService.getAll());
+        List<GameDto> gameDtos = gameService.getAll();
+        if (gameDtos.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(gameDtos);
+
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable String id) {
         gameService.delete(id);
-        return ResponseHelper.delete();
+        return ResponseEntity.noContent().build();
     }
 }

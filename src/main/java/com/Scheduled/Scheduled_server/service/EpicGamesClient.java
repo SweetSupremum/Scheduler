@@ -1,11 +1,12 @@
-package com.Scheduled.Scheduled_server.parser;
+package com.Scheduled.Scheduled_server.service;
 
 import com.Scheduled.Scheduled_server.model.Game;
+import com.Scheduled.Scheduled_server.parser.GameParser;
 import com.Scheduled.Scheduled_server.utils.EpicGamesClientHelper;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.springframework.data.util.Pair;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,7 +21,7 @@ import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_GAMES;
 import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_PAGES_COUNT;
 import static com.Scheduled.Scheduled_server.utils.Constants.START_URL;
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class EpicGamesClient {
     private final GameParser gameParser;

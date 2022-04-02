@@ -14,7 +14,7 @@ public class GameServiceHelper {
         return Pair.of(throwGamesList(oldGames, gamesAndInvalidIds), leaveGamesLists(oldGames, gamesAndInvalidIds.getFirst()));
     }
 
-    private boolean deleteFlag(List<Game> newGames, List<String> invalidIds, Game game) {
+    private boolean isThrow(List<Game> newGames, List<String> invalidIds, Game game) {
         return !(containsInNewGames(newGames, game) || containsInInvalidIds(game, invalidIds));
     }
 
@@ -36,7 +36,7 @@ public class GameServiceHelper {
     private List<Game> throwGamesList(List<Game> oldGames, Pair<List<Game>, List<String>> gamesAndInvalidIds) {
         return oldGames
                 .stream()
-                .filter(game -> deleteFlag(gamesAndInvalidIds.getFirst(), gamesAndInvalidIds.getSecond(), game))
+                .filter(game -> isThrow(gamesAndInvalidIds.getFirst(), gamesAndInvalidIds.getSecond(), game))
                 .collect(Collectors.toList());
     }
 

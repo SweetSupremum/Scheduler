@@ -12,6 +12,7 @@ import javax.persistence.Id;
 @Data
 @AllArgsConstructor
 public class GameLibrary {
+
     @Id
     private String gameId;
 

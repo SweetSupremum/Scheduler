@@ -38,7 +38,7 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(new ApiException(
                 "already there",
                 e,
-                HttpStatus.INTERNAL_SERVER_ERROR,
+                HttpStatus.BAD_REQUEST,
                 ZonedDateTime.now(ZoneId.of("Z"))),
                 HttpStatus.BAD_REQUEST);
 
