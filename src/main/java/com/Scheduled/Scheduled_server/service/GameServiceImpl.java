@@ -6,7 +6,6 @@ import com.Scheduled.Scheduled_server.model.Game;
 import com.Scheduled.Scheduled_server.model.GameHistoryId;
 import com.Scheduled.Scheduled_server.repository.GameHistoryRepository;
 import com.Scheduled.Scheduled_server.repository.GameRepository;
-import com.Scheduled.Scheduled_server.utils.GameServiceHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
@@ -50,11 +49,16 @@ public class GameServiceImpl {
 
 
     public void rebootGames(ZonedDateTime currentDate) throws IOException {
-        Pair<List<Game>, List<Game>> rebootList = GameServiceHelper.rebootLists(epicGamesClient.loadGames(), gameRepository.findAll());
-        List<Game> leaveGamesLists = rebootList.getSecond();
+        List<Game> oldGames = gameHistoryRepository.findAll().stream().map(gameMapper::toGame).collect(Collectors.toList());
+        Pair<List<Game>, List<String>> rebootList = epicGamesClient.loadGames();
+        List<Game> addOrUpdate = rebootList.getFirst().stream().filter(game -> !oldGames.contains(game)).collect(Collectors.toList());
+        saveAllGameHistories(addOrUpdate, currentDate);
+        gameRepository.saveAll(rebootList.getFirst());
+      /*  List<Game> leaveGamesLists = rebootList.getSecond();
         gameRepository.deleteAll(rebootList.getFirst());
         gameRepository.saveAll(leaveGamesLists);
-        saveAllGameHistories(leaveGamesLists, currentDate);
+        saveAllGameHistories(leaveGamesLists, currentDate);*/
+
     }
 
     public void saveAllGameHistories(List<Game> games, ZonedDateTime created) {

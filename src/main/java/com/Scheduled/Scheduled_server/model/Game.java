@@ -1,6 +1,7 @@
 package com.Scheduled.Scheduled_server.model;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 @Entity
 @Data
 @NoArgsConstructor // убрать конструктор
+@AllArgsConstructor
 public class Game {
 
     public Game(String id, String name, Double price, String link, String image) {

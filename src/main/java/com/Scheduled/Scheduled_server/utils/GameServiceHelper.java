@@ -14,8 +14,8 @@ public class GameServiceHelper {
         return Pair.of(throwGamesList(oldGames, gamesAndInvalidIds), leaveGamesLists(oldGames, gamesAndInvalidIds.getFirst()));
     }
 
-    private boolean isThrow(List<Game> newGames, List<String> invalidIds, Game game) {
-        return !(containsInNewGames(newGames, game) || containsInInvalidIds(game, invalidIds));
+    private boolean isThrow(List<Game> newGames, List<String> invalidIds, Game oldGame) {
+        return !(containsInNewGames(newGames, oldGame) || containsInInvalidIds(oldGame, invalidIds));
     }
 
     private boolean containsInNewGames(List<Game> newGames, Game game) {

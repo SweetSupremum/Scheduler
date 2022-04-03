@@ -32,7 +32,7 @@ public class EpicGamesClientHelper {
     }
 
     public Pair<List<Game>, List<String>> totalGameLists(List<Game> games) {
-        System.out.println(games.size());
+
         Supplier<Stream<Game>> streamSupplier = games::stream;
         return Pair.of(streamSupplier.get()
                         .filter(EpicGamesClientHelper::isValidGame)
@@ -41,4 +41,6 @@ public class EpicGamesClientHelper {
                         .filter(EpicGamesClientHelper::isInvalidGame)
                         .map(Game::getId).collect(Collectors.toList()));
     }
+
+
 }
