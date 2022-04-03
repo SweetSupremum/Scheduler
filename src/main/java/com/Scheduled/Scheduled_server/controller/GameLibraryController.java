@@ -37,7 +37,9 @@ public class GameLibraryController {
     @PostMapping
     public ResponseEntity<?> add(@RequestBody GameLibrary gameLibrary) {
         gameLibraryService.add(gameLibrary);
-        return ResponseEntity.created(URI.create(String.format("library/%s", gameLibrary.getGameId()))).body(gameLibrary);
+        return ResponseEntity
+                .created(URI.create(String.format("library/%s", gameLibrary.getGameId())))
+                .body(gameLibrary);
     }
 
     @DeleteMapping("/delete")

@@ -25,10 +25,10 @@ import static com.Scheduled.Scheduled_server.utils.Constants.SELECT_DISCOUNT_PER
 import static com.Scheduled.Scheduled_server.utils.Constants.SEPARATOR_COMMA;
 import static com.Scheduled.Scheduled_server.utils.Constants.SEPARATOR_DOT;
 import static com.Scheduled.Scheduled_server.utils.Constants.TAG_IMAGE;
+import static com.Scheduled.Scheduled_server.utils.Constants.twoPoints;
 
 @Component
 public class GameParser {
-
 
 
     private String parseId(String link) {
@@ -47,7 +47,7 @@ public class GameParser {
         return parsePrices(element.select(SELECTOR_DISCOUNT_PRICE).text());
     }
 
-    private double parsePrices(String price) {
+    private Double parsePrices(String price) {
         if (price.equals(REGEX_PATTERN_FREE)) return 0.0;
         StringBuilder currentPrice = new StringBuilder();
         Matcher matcher = Pattern.compile(REGEX_PATTERN_PRICE).matcher(price);
@@ -57,8 +57,21 @@ public class GameParser {
         if (currentPrice.toString().equals(Strings.EMPTY)) {
             return NO_VALID_PRICE_GAME;
         }
-        return Double.parseDouble(currentPrice.toString()
-                .replaceAll(HTML_SPACES, Strings.EMPTY).replaceAll(SEPARATOR_COMMA, SEPARATOR_DOT));
+        String finishedParsePrice = currentPrice.toString()
+                .replaceAll(HTML_SPACES, Strings.EMPTY).replaceAll(SEPARATOR_COMMA, SEPARATOR_DOT);
+        if (isContainsPenny(finishedParsePrice)) {
+            return Double.parseDouble(finishedParsePrice.replaceFirst(SEPARATOR_DOT, Strings.EMPTY));
+        }
+        return Double.parseDouble(finishedParsePrice);
+    }
+
+    private boolean isContainsPenny(String finishedParsePrice) {
+        int countPoints = 0;
+        Matcher matcher = Pattern.compile(SEPARATOR_DOT).matcher(finishedParsePrice);
+        while (matcher.find()) {
+            countPoints++;
+        }
+        return countPoints == twoPoints;
     }
 
     private String getLink(Element element) {
