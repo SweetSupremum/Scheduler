@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.time.LocalDate;
 
 
 @Entity
@@ -14,14 +15,6 @@ import javax.persistence.Id;
 @NoArgsConstructor // убрать конструктор
 @AllArgsConstructor
 public class Game {
-
-    public Game(String id, String name, Double price, String link, String image) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.link = link;
-        this.image = image;
-    }
 
     @Id
     private String id;
@@ -32,5 +25,15 @@ public class Game {
     private String image;
     private Double discountPrice;
     private Integer discountPercent;
+    private boolean isReleased;
+    private LocalDate releasedDate;
+
+    public Game(String id, String name, Double price, String link, String image) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.link = link;
+        this.image = image;
+    }
 
 }

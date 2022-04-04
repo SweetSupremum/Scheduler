@@ -5,6 +5,8 @@ import org.apache.logging.log4j.util.Strings;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,9 +17,12 @@ import static com.Scheduled.Scheduled_server.utils.Constants.LINK_STORE_EPIC_GAM
 import static com.Scheduled.Scheduled_server.utils.Constants.REGEX_PATTERN_DISCOUNT_PERCENT;
 import static com.Scheduled.Scheduled_server.utils.Constants.REGEX_PATTERN_FREE;
 import static com.Scheduled.Scheduled_server.utils.Constants.REGEX_PATTERN_ID;
+import static com.Scheduled.Scheduled_server.utils.Constants.REGEX_PATTERN_IS_RELEASED;
 import static com.Scheduled.Scheduled_server.utils.Constants.REGEX_PATTERN_PRICE;
+import static com.Scheduled.Scheduled_server.utils.Constants.REGEX_PATTERN_RELEASED_DATE;
 import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_DISCOUNT_PRICE;
 import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_FLAG_DISCOUNT;
+import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_RELEASED;
 import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_NAME;
 import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_PRICE;
 import static com.Scheduled.Scheduled_server.utils.Constants.SELECT_DISCOUNT_PERCENT;
@@ -64,6 +69,32 @@ public class GameParser {
         return Double.parseDouble(finishedParsePrice);
     }
 
+    private boolean isReleased(Element element, Game game) {
+        return !Pattern.compile(REGEX_PATTERN_IS_RELEASED)
+                .matcher(getReleased(element))
+                .find() && game.getReleasedDate() == null;
+    }
+
+    private String getReleased(Element element) {
+        return element.select(SELECTOR_RELEASED).text();
+    }
+
+    private LocalDate parseReleasedDate(Element element) {
+
+        Matcher matcher = Pattern.compile(REGEX_PATTERN_RELEASED_DATE).matcher(getReleased(element));
+
+        StringBuilder dateBuilder = new StringBuilder();
+        while (matcher.find()) {
+            dateBuilder.append(matcher.group());
+        }
+        String date = dateBuilder.toString();
+
+        if (date.equals(Strings.EMPTY)) return null;
+
+        return LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yy"));
+    }
+
+    //Select * From Game where name='Evil Dead: The Game' or name = 'F1® Manager 2022'
     private boolean isContainsPenny(String finishedParsePrice) {
         int countPoints = 0;
         Matcher matcher = Pattern.compile(SEPARATOR_DOT).matcher(finishedParsePrice);
@@ -91,11 +122,15 @@ public class GameParser {
         String link = getLink(element);
 
         Game game = new Game();
+
         game.setId(parseId(link));
         game.setName(parseName(element));
         game.setPrice(parsePrice(element));
         game.setLink(LINK_STORE_EPIC_GAMES + link);
         game.setImage(parseImage(element));
+        game.setReleasedDate(parseReleasedDate(element));
+        game.setReleased(isReleased(element, game));
+
         if (element.selectFirst(SELECTOR_FLAG_DISCOUNT) != null) {
             game.setDiscountPrice(parseDiscountPrice(element));
             game.setDiscountPercent(parseDiscountPercent(element));

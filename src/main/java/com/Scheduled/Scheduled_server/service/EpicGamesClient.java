@@ -45,7 +45,7 @@ public class EpicGamesClient {
                 .flatMap(url -> {
                             try {
                                 Elements elements = Jsoup.connect(url).get().select(SELECTOR_GAMES);
-                                elements.stream().map(gameParser::parseGame).distinct().forEach(System.out::println);
+                               /* elements.stream().map(gameParser::parseGame).distinct().forEach(System.out::println);*/
                                 return elements.parallelStream();
 
                             } catch (IOException e) {
@@ -59,7 +59,7 @@ public class EpicGamesClient {
                 .distinct()
                 .collect(Collectors.toList());
         System.out.println(games.size());
-        games.forEach(System.out::println);
+       /* games.forEach(System.out::println);*/
         return EpicGamesClientHelper.totalGameLists(games);
     }
 

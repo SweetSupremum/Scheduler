@@ -10,7 +10,7 @@ databaseChangeLog:
                   name: created
                   type: TIMESTAMP
                   constraints:
-                    nullable: true
+                    nullable: false
               - column:
                   name: game_id
                   type: varchar(200)

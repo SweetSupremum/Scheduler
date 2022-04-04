@@ -11,6 +11,7 @@ public interface Constants {
     String SELECTOR_FLAG_DISCOUNT = ".css-1rcj98u";
     String SELECTOR_PRICE = "aria-label";
     String SELECTOR_DISCOUNT_PRICE = ".css-l24hbj .css-z3vg5b";
+    String SELECTOR_RELEASED = ".css-11ksoqt";
     String LINK_STORE_EPIC_GAMES = "https://store.epicgames.com";
     String REGEX_PATTERN_FREE = "Бесплатно";
     String REGEX_PATTERN_PRICE = "(((((\\d{1,3})?(\\s|&nbsp;| )(\\d{1,3})),(\\d+)((\\s|&nbsp;| )₽$))|(0$))|((RUB)(\\s|&nbsp;| )(\\d+)[,.]?(\\d+)([,.]\\d++)?))";
@@ -19,6 +20,8 @@ public interface Constants {
     String HTML_SPACES = "[\\s₽&nbsp; RUB]";
     String SELECT_DISCOUNT_PERCENT = ".css-b0xoos";
     String REGEX_PATTERN_RUSSIAN_VERSION = "^/ru";
+    String REGEX_PATTERN_IS_RELEASED = "Скоро появится";
+    String REGEX_PATTERN_RELEASED_DATE = "(\\d{2}/\\d{2}/\\d{2})";
     String TAG_IMAGE = "img";
     String ATTRIBUTE_DATA_IMAGE = "data-image";
     String ATTRIBUTE_HREF = "href";
