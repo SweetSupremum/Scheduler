@@ -69,10 +69,10 @@ public class GameParser {
         return Double.parseDouble(finishedParsePrice);
     }
 
-    private boolean isReleased(Element element, Game game) {
+    private boolean isReleased(Element element) {
         return !Pattern.compile(REGEX_PATTERN_IS_RELEASED)
                 .matcher(getReleased(element))
-                .find() && game.getReleasedDate() == null;
+                .find();
     }
 
     private String getReleased(Element element) {
@@ -129,7 +129,7 @@ public class GameParser {
         game.setLink(LINK_STORE_EPIC_GAMES + link);
         game.setImage(parseImage(element));
         game.setReleasedDate(parseReleasedDate(element));
-        game.setReleased(isReleased(element, game));
+        game.setReleased(isReleased(element));
 
         if (element.selectFirst(SELECTOR_FLAG_DISCOUNT) != null) {
             game.setDiscountPrice(parseDiscountPrice(element));

@@ -20,7 +20,7 @@ public interface Constants {
     String HTML_SPACES = "[\\s₽&nbsp; RUB]";
     String SELECT_DISCOUNT_PERCENT = ".css-b0xoos";
     String REGEX_PATTERN_RUSSIAN_VERSION = "^/ru";
-    String REGEX_PATTERN_IS_RELEASED = "Скоро появится";
+    String REGEX_PATTERN_IS_RELEASED = "(Будет доступно (\\d{2}/\\d{2}/\\d{2}))|(Скоро появится)";
     String REGEX_PATTERN_RELEASED_DATE = "(\\d{2}/\\d{2}/\\d{2})";
     String TAG_IMAGE = "img";
     String ATTRIBUTE_DATA_IMAGE = "data-image";
