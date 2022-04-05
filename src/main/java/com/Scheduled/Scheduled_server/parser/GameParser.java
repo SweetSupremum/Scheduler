@@ -31,9 +31,14 @@ import static com.Scheduled.Scheduled_server.utils.Constants.SEPARATOR_DOT;
 import static com.Scheduled.Scheduled_server.utils.Constants.TAG_IMAGE;
 import static com.Scheduled.Scheduled_server.utils.Constants.TWO_POINTS;
 
+
 @Component
 public class GameParser {
 
+    private static final Pattern RELEASED_DATE = Pattern.compile(REGEX_PATTERN_RELEASED_DATE);
+    private static final Pattern IS_RELEASED = Pattern.compile(REGEX_PATTERN_IS_RELEASED);
+    private static final Pattern PRICE = Pattern.compile(REGEX_PATTERN_PRICE);
+    private static final Pattern DOT = Pattern.compile(SEPARATOR_DOT);
 
     private String parseId(String link) {
         return link.replaceAll(REGEX_PATTERN_ID, Strings.EMPTY);
@@ -52,27 +57,31 @@ public class GameParser {
     }
 
     private Double parsePrices(String price) {
+
         if (price.equals(REGEX_PATTERN_FREE)) return 0.0;
+
         StringBuilder currentPrice = new StringBuilder();
-        Matcher matcher = Pattern.compile(REGEX_PATTERN_PRICE).matcher(price);
+        Matcher matcher = PRICE.matcher(price);
         while (matcher.find()) {
             currentPrice.append(matcher.group());
         }
+
         if (currentPrice.toString().equals(Strings.EMPTY)) {
             return -1.0;
         }
+
         String finishedParsePrice = currentPrice.toString()
                 .replaceAll(HTML_SPACES, Strings.EMPTY).replaceAll(SEPARATOR_COMMA, SEPARATOR_DOT);
+
         if (isContainsPenny(finishedParsePrice)) {
             return Double.parseDouble(finishedParsePrice.replaceFirst(SEPARATOR_DOT, Strings.EMPTY));
         }
+
         return Double.parseDouble(finishedParsePrice);
     }
 
     private boolean isReleased(Element element) {
-        return !Pattern.compile(REGEX_PATTERN_IS_RELEASED)
-                .matcher(getReleased(element))
-                .find();
+        return !IS_RELEASED.matcher(getReleased(element)).find();
     }
 
     private String getReleased(Element element) {
@@ -81,7 +90,7 @@ public class GameParser {
 
     private LocalDate parseReleasedDate(Element element) {
 
-        Matcher matcher = Pattern.compile(REGEX_PATTERN_RELEASED_DATE).matcher(getReleased(element));
+        Matcher matcher = RELEASED_DATE.matcher(getReleased(element));
 
         StringBuilder dateBuilder = new StringBuilder();
         while (matcher.find()) {
@@ -97,7 +106,7 @@ public class GameParser {
     //Select * From Game where name='Evil Dead: The Game' or name = 'F1® Manager 2022'
     private boolean isContainsPenny(String finishedParsePrice) {
         int countPoints = 0;
-        Matcher matcher = Pattern.compile(SEPARATOR_DOT).matcher(finishedParsePrice);
+        Matcher matcher = DOT.matcher(finishedParsePrice);
         while (matcher.find()) {
             countPoints++;
         }

@@ -2,11 +2,15 @@ package com.Scheduled.Scheduled_server.service;
 
 import com.Scheduled.Scheduled_server.error.advice.custom.AlreadyInLibraryException;
 import com.Scheduled.Scheduled_server.error.advice.custom.GameNotFoundException;
+import com.Scheduled.Scheduled_server.model.Customer;
 import com.Scheduled.Scheduled_server.model.Game;
 import com.Scheduled.Scheduled_server.model.GameLibrary;
+import com.Scheduled.Scheduled_server.repository.CustomerRepository;
 import com.Scheduled.Scheduled_server.repository.GameLibraryRepository;
 import com.Scheduled.Scheduled_server.repository.GameRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +21,7 @@ import java.util.stream.Collectors;
 public class GameLibraryService {
     private final GameRepository gameRepository;
     private final GameLibraryRepository gameLibraryRepository;
+    private final CustomerRepository customerRepository;
 
 
     public GameLibrary get(String gameId) {
@@ -36,6 +41,10 @@ public class GameLibraryService {
     }
 
     public void add(GameLibrary gameLibrary) {
+        Customer customer = customerRepository.findByUserName(SecurityContextHolder.getContext()
+                .getAuthentication().getName()).orElseThrow(() -> {
+            throw new UsernameNotFoundException("Not Auth");
+        });
         String gameId = gameRepository
                 .findById(gameLibrary.getGameId())
                 .map(Game::getId).orElseThrow(GameNotFoundException::new);

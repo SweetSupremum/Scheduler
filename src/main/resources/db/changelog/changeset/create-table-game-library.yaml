@@ -12,4 +12,30 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     nullable: false
+              - column:
+                  name: customer_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
 
+
+  - changeSet:
+      id: create-foreignKey-customer-id
+      author: Sweet Supremum
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: customer_id
+            baseTableCatalogName: Scheduler
+            baseTableName: game_library
+            baseTableSchemaName: public
+            constraintName: fk_game_history_customer
+            deferrable: true
+            initiallyDeferred: true
+            onDelete: CASCADE
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableCatalogName: Scheduler
+            referencedTableName: customer
+            referencedTableSchemaName: public
+            validate: true
