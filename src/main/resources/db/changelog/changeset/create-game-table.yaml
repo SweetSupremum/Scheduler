@@ -1,0 +1,59 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-game
+      author: Sweet Supremum
+      changes:
+        - createTable:
+            tableName: game
+            columns:
+              - column:
+                  name: id
+                  type: varchar(200)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: Numeric
+                  constraints:
+                    nullable: false
+              - column:
+                  name: discount_price
+                  type: Numeric
+                  constraints:
+                    nullable: true
+              - column:
+                  name: image
+                  type: varchar(1000)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: discount_percent
+                  type: bigint
+                  constraints:
+                    nullable: true
+              - column:
+                  name: link
+                  type: varchar(1000)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: is_deleted
+                  type: boolean
+                  constraints:
+                    nullable: true
+              - column:
+                  name: is_released
+                  type: boolean
+                  constraints:
+                    nullable: true
+              - column:
+                  name: released_date
+                  type: DATE
+                  constraints:
+                    nullable: true

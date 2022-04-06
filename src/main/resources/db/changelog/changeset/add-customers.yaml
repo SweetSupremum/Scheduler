@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-customers
+      author: sweetSupremum
+      changes:
+        - insert:
+            catalogName: Scheduler
+            columns:
+              - column:
+                  name: user_name
+                  value: user
+              - column:
+                  name: password
+                  value: $2a$12$lM28yifvwQ7pPV54fMoTR.u8hxPkr5CW7Xmk8/.eBU6yz1w3yFyBW
+              - column:
+                  name: status
+                  value: ACTIVE
+            schemaName: public
+            tableName: customer
+        - insert:
+            catalogName: Scheduler
+            columns:
+              - column:
+                  name: user_name
+                  value: admin
+              - column:
+                  name: password
+                  value: $2a$12$8y05L/G5qBtBTsdxIBCtxuKlSNrYNDJEWju0.8DTJ5PH4cnifGqYa
+              - column:
+                  name: role
+                  value: ADMIN
+              - column:
+                  name: status
+                  value: ACTIVE
+            schemaName: public
+            tableName: customer
