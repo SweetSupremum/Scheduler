@@ -29,14 +29,13 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 public class EpicGamesClient {
 
-    private final GameParser gameParser;
-
     private static int attempt = 0;
+    private final GameParser gameParser;
 
     @Retryable(maxAttempts = 10, value = NoSuchElementException.class, backoff = @Backoff(delay = 500, multiplier = 2))
     public List<Game> loadGames() throws IOException {
         int pagesCount = pagesCount();
-        log.info("count attempt retryable {}" , attempt);
+        log.info("count attempt retryable {}", attempt);
         List<Element> gamesElement = IntStream
                 .range(PAGINATION_START, pagesCount)
                 .mapToObj(current -> START_URL + current * PAGINATION_STEP)

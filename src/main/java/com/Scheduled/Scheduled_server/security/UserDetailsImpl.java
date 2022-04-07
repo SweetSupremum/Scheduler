@@ -20,6 +20,20 @@ public class UserDetailsImpl implements UserDetails {
     private Customer customer;
     private boolean isActive;
 
+    public static UserDetails build(Customer customer) {
+        List<SimpleGrantedAuthority> authorities = List
+                .of(new SimpleGrantedAuthority(customer.getRole().getAuthority()));
+        return new User(
+                customer.getUserName(),
+                customer.getPassword(),
+                true,
+                true,
+                true,
+                customer.getStatus().equals(Status.ACTIVE),
+                authorities
+        );
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
@@ -53,19 +67,5 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public static UserDetails build(Customer customer) {
-        List<SimpleGrantedAuthority> authorities = List
-                .of(new SimpleGrantedAuthority(customer.getRole().getAuthority()));
-        return new User(
-                customer.getUserName(),
-                customer.getPassword(),
-                true,
-                true,
-                true,
-                customer.getStatus().equals(Status.ACTIVE),
-                authorities
-        );
     }
 }

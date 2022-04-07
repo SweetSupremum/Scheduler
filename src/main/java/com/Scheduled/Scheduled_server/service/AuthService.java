@@ -7,6 +7,7 @@ import com.Scheduled.Scheduled_server.model.Status;
 import com.Scheduled.Scheduled_server.repository.CustomerRepository;
 import com.Scheduled.Scheduled_server.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final CustomerRepository customerRepository;
@@ -33,6 +35,7 @@ public class AuthService {
                 .filter(item -> item.getStatus().name().equals(Status.ACTIVE.name()))
                 .orElseThrow(UserBannedException::new))
                 .orElseThrow(() -> new UsernameNotFoundException("User doesn't exists"));
+        log.info("User -> {}", customerAuthDto);
         return jwtTokenProvider.createToken(userName, customer.getRole().name());
 
     }

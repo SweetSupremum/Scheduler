@@ -17,11 +17,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalTime;
 import java.util.Base64;
 import java.util.Date;
-
-import static java.time.temporal.ChronoField.MILLI_OF_SECOND;
 
 @Component
 @RequiredArgsConstructor

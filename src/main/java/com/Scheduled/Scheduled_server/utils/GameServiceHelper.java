@@ -43,7 +43,6 @@ public class GameServiceHelper {
     private boolean noContainsOldGames(List<Game> oldGames, Game game) {
         return !oldGames.contains(game);
     }
-    
 
 
 }

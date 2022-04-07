@@ -22,9 +22,9 @@ import static com.Scheduled.Scheduled_server.utils.Constants.REGEX_PATTERN_PRICE
 import static com.Scheduled.Scheduled_server.utils.Constants.REGEX_PATTERN_RELEASED_DATE;
 import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_DISCOUNT_PRICE;
 import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_FLAG_DISCOUNT;
-import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_RELEASED;
 import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_NAME;
 import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_PRICE;
+import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_RELEASED;
 import static com.Scheduled.Scheduled_server.utils.Constants.SELECT_DISCOUNT_PERCENT;
 import static com.Scheduled.Scheduled_server.utils.Constants.SEPARATOR_COMMA;
 import static com.Scheduled.Scheduled_server.utils.Constants.SEPARATOR_DOT;

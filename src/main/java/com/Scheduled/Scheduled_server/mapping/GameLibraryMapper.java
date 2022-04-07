@@ -9,7 +9,9 @@ import java.util.List;
 
 @Mapper
 public interface GameLibraryMapper {
-    GameLibrary toDto (GameLibraryDto gameLibraryDto, Customer customer);
-    GameLibraryDto dtoTo (GameLibrary gameLibrary);
-    List<GameLibraryDto> dtosTo (List<GameLibrary> gameLibraries);
+    GameLibrary toDto(GameLibraryDto gameLibraryDto, Customer customer);
+
+    GameLibraryDto dtoTo(GameLibrary gameLibrary);
+
+    List<GameLibraryDto> dtosTo(List<GameLibrary> gameLibraries);
 }

@@ -3,20 +3,17 @@ package com.Scheduled.Scheduled_server.service;
 import com.Scheduled.Scheduled_server.dto.GameDto;
 import com.Scheduled.Scheduled_server.mapping.GameMapper;
 import com.Scheduled.Scheduled_server.model.Game;
-import com.Scheduled.Scheduled_server.model.GameHistory;
 import com.Scheduled.Scheduled_server.model.GameHistoryId;
 import com.Scheduled.Scheduled_server.repository.GameHistoryRepository;
 import com.Scheduled.Scheduled_server.repository.GameRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -63,13 +60,13 @@ public class GameServiceImpl {
         List<Game> update = newGames.stream().filter(game -> !oldGames.contains(game) && oldIds.contains(game.getId())).collect(toList());
         List<String> updateIds = update.stream().map(Game::getId).collect(toList());
         List<Game> addOrUpdate = newGames.stream().filter(game -> !oldGames.contains(game)).collect(toList());
-        List<Game> add =  newGames.stream().filter(game -> !oldGames.contains(game) && !oldIds.contains(game.getId())).collect(toList());
+        List<Game> add = newGames.stream().filter(game -> !oldGames.contains(game) && !oldIds.contains(game.getId())).collect(toList());
         oldGames.stream().filter(game -> updateIds.contains(game.getId())).peek(game -> game.setDeleted(true)).close();
         gameRepository.deleteAllByDeleted();
         gameRepository.saveAll(addOrUpdate);
-        saveAllGameHistories(addOrUpdate,currentDate);
-        update.forEach(game -> log.info("i update -> {}",game));
-        add.forEach(game -> log.info("i add -> {}",game));
+        saveAllGameHistories(addOrUpdate, currentDate);
+        update.forEach(game -> log.info("i update -> {}", game));
+        add.forEach(game -> log.info("i add -> {}", game));
 
 
     }
