@@ -16,26 +16,8 @@ import java.util.List;
 public class GameLibraryController {
     private final GameLibraryService gameLibraryService;
 
-    @GetMapping("/{gameId}")
-    public ResponseEntity<?> get(@PathVariable String gameId) {
-        GameLibrary gameLibrary = gameLibraryService.get(gameId);
-        if (gameLibrary == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(gameLibrary);
-    }
-
-    @GetMapping
-    public ResponseEntity<?> getAll() {
-        List<GameLibrary> gameDtos = gameLibraryService.getAll();
-        if (gameDtos.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(gameDtos);
-    }
-
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody GameLibrary gameLibrary) {
+    public ResponseEntity<?> add(@RequestBody GameLibraryDto gameLibrary) {
         gameLibraryService.add(gameLibrary);
         return ResponseEntity
                 .created(URI.create(String.format("library/%s", gameLibrary.getGameId())))

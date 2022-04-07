@@ -28,8 +28,8 @@ public class GameController {
 
     @GetMapping
     @CrossOrigin
-    public ResponseEntity<?> getAll() {
-        List<GameDto> gameDtos = gameService.getAll();
+    public ResponseEntity<?> getAllInLibraries(@RequestParam("in_library") boolean inLibrary) {
+        List<GameDto> gameDtos = gameService.getAllInLibraries(inLibrary);
         if (gameDtos.isEmpty()) {
             return ResponseEntity.notFound().build();
         }

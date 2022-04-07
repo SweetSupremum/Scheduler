@@ -33,26 +33,26 @@ public class JwtTokenProvider {
 
     private String secretKey;
     private String authorizationHeader;
-    private long validity;
+    private long expired;
 
     @PostConstruct
     private void init() {
         secretKey = Base64.getEncoder().encodeToString(environment.getProperty("secret").getBytes());
         authorizationHeader = environment.getProperty("header");
-        validity = Long.parseLong(environment.getProperty("expiration"));
+        expired = Long.parseLong(environment.getProperty("expiration"));
     }
 
     public String createToken(String username, String role) {
 
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("role", role);
-        LocalTime now = LocalTime.now();
-        Date validityT = new Date(now.getLong(MILLI_OF_SECOND) + validity * 1000);
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + expired * 1000);
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setIssuedAt(validityT)
-                .setExpiration(validityT)
+                .setIssuedAt(validity)
+                .setExpiration(validity)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }

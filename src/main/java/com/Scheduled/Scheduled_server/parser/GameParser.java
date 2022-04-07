@@ -48,11 +48,11 @@ public class GameParser {
         return element.selectFirst(SELECTOR_NAME).text();
     }
 
-    private double parsePrice(Element element) {
+    private Double parsePrice(Element element) {
         return parsePrices(element.attr(SELECTOR_PRICE));
     }
 
-    private double parseDiscountPrice(Element element) {
+    private Double parseDiscountPrice(Element element) {
         return parsePrices(element.select(SELECTOR_DISCOUNT_PRICE).text());
     }
 
@@ -67,7 +67,7 @@ public class GameParser {
         }
 
         if (currentPrice.toString().equals(Strings.EMPTY)) {
-            return -1.0;
+            return null;
         }
 
         String finishedParsePrice = currentPrice.toString()
@@ -129,24 +129,26 @@ public class GameParser {
 
     public Game parseGame(Element element) {
         String link = getLink(element);
+        Double price = parsePrice(element);
 
         Game game = new Game();
-
         game.setId(parseId(link));
         game.setName(parseName(element));
-        game.setPrice(parsePrice(element));
+        game.setPrice(price);
         game.setLink(LINK_STORE_EPIC_GAMES + link);
         game.setImage(parseImage(element));
         game.setReleasedDate(parseReleasedDate(element));
         game.setReleased(isReleased(element));
 
-        if (element.selectFirst(SELECTOR_FLAG_DISCOUNT) != null) {
+        if (element.selectFirst(SELECTOR_FLAG_DISCOUNT) != null && price != null) {
             game.setDiscountPrice(parseDiscountPrice(element));
             game.setDiscountPercent(parseDiscountPercent(element));
         } else {
             game.setDiscountPercent(0);
             game.setDiscountPrice(parsePrice(element));
         }
+
+        game.setDeleted(false);
         return game;
     }
 

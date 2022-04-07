@@ -3,21 +3,27 @@ package com.Scheduled.Scheduled_server.service;
 import com.Scheduled.Scheduled_server.dto.GameDto;
 import com.Scheduled.Scheduled_server.mapping.GameMapper;
 import com.Scheduled.Scheduled_server.model.Game;
+import com.Scheduled.Scheduled_server.model.GameHistory;
 import com.Scheduled.Scheduled_server.model.GameHistoryId;
 import com.Scheduled.Scheduled_server.repository.GameHistoryRepository;
 import com.Scheduled.Scheduled_server.repository.GameRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
+
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class GameServiceImpl {
     private final GameRepository gameRepository;
     private final GameMapper gameMapper;
@@ -33,13 +39,15 @@ public class GameServiceImpl {
 
     }
 
-    public List<GameDto> getAll() {
-        List<String> gamesInLibrary = gameLibraryService.getAllIds();
+    public List<GameDto> getAllInLibraries(boolean inLibrary) {
+        List<String> gameIds = gameLibraryService.getAllIds();
         return gameRepository
                 .findAll()
                 .stream()
-                .map(game -> gameMapper.toDto(game, gamesInLibrary.contains(game.getId())))
-                .collect(Collectors.toList());
+                .map(game -> gameMapper.toDto(game, gameIds.contains(game.getId())))
+                .filter(gameDto -> gameDto.isInLibrary() == inLibrary)
+                .collect(toList());
+
 
     }
 
@@ -47,23 +55,28 @@ public class GameServiceImpl {
         gameRepository.deleteById(id);
     }
 
-
+    @Transactional
     public void rebootGames(ZonedDateTime currentDate) throws IOException {
-        List<Game> oldGames = gameHistoryRepository.findAll().stream().map(gameMapper::toGame).collect(Collectors.toList());
-        Pair<List<Game>, List<String>> rebootList = epicGamesClient.loadGames();
-        List<Game> addOrUpdate = rebootList.getFirst().stream().filter(game -> !oldGames.contains(game)).collect(Collectors.toList());
-        saveAllGameHistories(addOrUpdate, currentDate);
-        gameRepository.saveAll(rebootList.getFirst());
-      /*  List<Game> leaveGamesLists = rebootList.getSecond();
-        gameRepository.deleteAll(rebootList.getFirst());
-        gameRepository.saveAll(leaveGamesLists);
-        saveAllGameHistories(leaveGamesLists, currentDate);*/
+        List<Game> oldGames = gameRepository.findAll();
+        List<Game> newGames = epicGamesClient.loadGames();
+        List<String> oldIds = oldGames.stream().map(Game::getId).collect(toList());
+        List<Game> update = newGames.stream().filter(game -> !oldGames.contains(game) && oldIds.contains(game.getId())).collect(toList());
+        List<String> updateIds = update.stream().map(Game::getId).collect(toList());
+        List<Game> addOrUpdate = newGames.stream().filter(game -> !oldGames.contains(game)).collect(toList());
+        List<Game> add =  newGames.stream().filter(game -> !oldGames.contains(game) && !oldIds.contains(game.getId())).collect(toList());
+        oldGames.stream().filter(game -> updateIds.contains(game.getId())).peek(game -> game.setDeleted(true)).close();
+        gameRepository.deleteAllByDeleted();
+        gameRepository.saveAll(addOrUpdate);
+        saveAllGameHistories(addOrUpdate,currentDate);
+        update.forEach(game -> log.info("i update -> {}",game));
+        add.forEach(game -> log.info("i add -> {}",game));
+
 
     }
 
     public void saveAllGameHistories(List<Game> games, ZonedDateTime created) {
         if (!games.isEmpty()) gameHistoryRepository.saveAll(games.parallelStream()
                 .map(game -> gameMapper.toGameHistory(game, new GameHistoryId(created, game.getId()))
-                ).collect(Collectors.toList()));
+                ).collect(toList()));
     }
 }

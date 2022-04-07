@@ -13,10 +13,7 @@ public interface Constants {
     String SELECTOR_DISCOUNT_PRICE = ".css-l24hbj .css-z3vg5b";
     String SELECTOR_RELEASED = ".css-11ksoqt";
     String LINK_STORE_EPIC_GAMES = "https://store.epicgames.com";
-    // ЭТОТ МОМЕНТ Я ОБЪЯСНЮ ТАК В ARIA -LABEL ВСЕГДА У НИХ ЛЕЖИТ ЦЕНА БЕЗ СКИДКИ aria-label="City of Brass, 32 из 40, City of Brass, Uppercut Games, 435,00 ₽ Я ТОЛЬКО
-    // ЧТО СКОПИРОВАЛ ЕЕ ОТТУДА И ВЫТАЩИЛ ЭТОЙ РЕГУЛЯРКОЙ, ПОЭТОМУ ISRELEASED и RELEASEDDATE ВООБЩЕ НИКАК НЕ ВЛИЯЮТ НА PRICE!
     String REGEX_PATTERN_FREE = "Бесплатно";
-    //PixArk Mod Kit, 39 из 40, PixArk Mod Kit, 0, либо она тут есть либо ее нет, только так не ВАЖНО ИГРА РЕЛИЗ ИЛИ НЕ РЕЛИЗ!!!!!!
     String REGEX_PATTERN_PRICE = "(((((\\d{1,3})?(\\s|&nbsp;| )(\\d{1,3})),(\\d+)((\\s|&nbsp;| )₽$))|(0$))|((RUB)(\\s|&nbsp;| )(\\d+)[,.]?(\\d+)([,.]\\d++)?))";
     String REGEX_PATTERN_DISCOUNT_PERCENT = "-?[^0-9]+";
     String REGEX_PATTERN_ID = "(^/ru/p/)|(^/ru/)|(^/ru/bundles)";
@@ -30,6 +27,5 @@ public interface Constants {
     String ATTRIBUTE_HREF = "href";
     String SEPARATOR_COMMA = ",";
     String SEPARATOR_DOT = "\\.";
-    double NO_VALID_PRICE_GAME = -1;
     int TWO_POINTS = 2;
 }
