@@ -40,6 +40,7 @@ public class GameLibraryService {
     }
 
     public void add(GameLibraryDto gameLibraryDto) {
+
         Customer customer = customerRepository.findByUserName(SecurityContextHolder.getContext()
                 .getAuthentication().getName()).orElseThrow(() -> {
             throw new UsernameNotFoundException("Not Auth");
@@ -51,11 +52,8 @@ public class GameLibraryService {
                 .ifPresentOrElse((__) -> {
                             throw new AlreadyInLibraryException();
                         },
-                        () -> {
-
-                            gameLibraryRepository.save(mapper.toDto(gameLibraryDto, customer));
-                        });
-
+                        () -> gameLibraryRepository.save(mapper.toDto(gameLibraryDto, customer))
+                );
 
     }
 }

@@ -17,11 +17,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static com.Scheduled.Scheduled_server.utils.Constants.PAGINATION_START;
-import static com.Scheduled.Scheduled_server.utils.Constants.PAGINATION_STEP;
-import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_GAMES;
-import static com.Scheduled.Scheduled_server.utils.Constants.SELECTOR_PAGES_COUNT;
-import static com.Scheduled.Scheduled_server.utils.Constants.START_URL;
+import static com.Scheduled.Scheduled_server.utils.Constants.*;
 import static java.util.stream.Collectors.toList;
 
 @Service
