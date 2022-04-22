@@ -1,6 +1,6 @@
 package com.Scheduled.Scheduled_server.service;
 
-import com.Scheduled.Scheduled_server.controller.GameLibraryDto;
+import com.Scheduled.Scheduled_server.dto.GameLibraryDto;
 import com.Scheduled.Scheduled_server.error.advice.custom.AlreadyInLibraryException;
 import com.Scheduled.Scheduled_server.error.advice.custom.GameNotFoundException;
 import com.Scheduled.Scheduled_server.mapping.GameLibraryMapper;

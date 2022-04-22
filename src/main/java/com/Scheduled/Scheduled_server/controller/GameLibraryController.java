@@ -1,5 +1,6 @@
 package com.Scheduled.Scheduled_server.controller;
 
+import com.Scheduled.Scheduled_server.dto.GameLibraryDto;
 import com.Scheduled.Scheduled_server.service.GameLibraryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
