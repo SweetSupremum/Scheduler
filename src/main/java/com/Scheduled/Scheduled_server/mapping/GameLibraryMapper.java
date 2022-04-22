@@ -10,6 +10,5 @@ public interface GameLibraryMapper {
 
     GameLibrary toDto(GameLibraryDto gameLibraryDto, Customer customer);
 
-    GameLibraryDto dtoTo(GameLibrary gameLibrary);
 
 }
