@@ -2,7 +2,7 @@ package com.Scheduled.Scheduled_server.controller;
 
 
 import com.Scheduled.Scheduled_server.dto.GameDto;
-import com.Scheduled.Scheduled_server.service.GameServiceImpl;
+import com.Scheduled.Scheduled_server.service.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/games")
 @RequiredArgsConstructor
 public class GameController {
-    private final GameServiceImpl gameService;
+    private final GameService gameService;
 
     @GetMapping("/{id}")
     @CrossOrigin

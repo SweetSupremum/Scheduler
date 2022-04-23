@@ -1,6 +1,6 @@
 package com.Scheduled.Scheduled_server.service;
 
-import com.Scheduled.Scheduled_server.controller.GameLibraryDto;
+import com.Scheduled.Scheduled_server.dto.GameLibraryDto;
 import com.Scheduled.Scheduled_server.error.advice.custom.AlreadyInLibraryException;
 import com.Scheduled.Scheduled_server.error.advice.custom.GameNotFoundException;
 import com.Scheduled.Scheduled_server.mapping.GameLibraryMapper;
@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -41,6 +40,7 @@ public class GameLibraryService {
     }
 
     public void add(GameLibraryDto gameLibraryDto) {
+
         Customer customer = customerRepository.findByUserName(SecurityContextHolder.getContext()
                 .getAuthentication().getName()).orElseThrow(() -> {
             throw new UsernameNotFoundException("Not Auth");
@@ -52,11 +52,8 @@ public class GameLibraryService {
                 .ifPresentOrElse((__) -> {
                             throw new AlreadyInLibraryException();
                         },
-                        () -> {
-
-                            gameLibraryRepository.save(mapper.toDto(gameLibraryDto, customer));
-                        });
-
+                        () -> gameLibraryRepository.save(mapper.toDto(gameLibraryDto, customer))
+                );
 
     }
 }

@@ -1,4 +1,4 @@
-package com.Scheduled.Scheduled_server.controller;
+package com.Scheduled.Scheduled_server.dto;
 
 import lombok.Data;
 

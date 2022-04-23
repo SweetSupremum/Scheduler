@@ -1,13 +1,12 @@
 package com.Scheduled.Scheduled_server.controller;
 
-import com.Scheduled.Scheduled_server.model.GameLibrary;
+import com.Scheduled.Scheduled_server.dto.GameLibraryDto;
 import com.Scheduled.Scheduled_server.service.GameLibraryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/library")

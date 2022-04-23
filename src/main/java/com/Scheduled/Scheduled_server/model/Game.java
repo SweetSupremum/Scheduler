@@ -12,8 +12,8 @@ import java.time.LocalDate;
 
 @Entity
 @Data
-@NoArgsConstructor // убрать конструктор
 @AllArgsConstructor
+@NoArgsConstructor
 public class Game {
 
     @Id
@@ -27,13 +27,7 @@ public class Game {
     private Integer discountPercent;
     private boolean isReleased;
     private LocalDate releasedDate;
+    private boolean isDeleted;
 
-    public Game(String id, String name, Double price, String link, String image) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.link = link;
-        this.image = image;
-    }
 
 }
